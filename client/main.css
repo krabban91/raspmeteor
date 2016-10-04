@@ -1,0 +1,38 @@
+body {
+	margin: 0px;
+	font-family: Roboto,sans-serif
+}
+main {
+	margin: 20px;
+}
+
+
+Paper {
+	padding: 20px;
+}
+
+div .login-outer {
+	text-align: center;
+}
+div .login-inner {
+	display: inline-block;
+	min-width: 300px;
+}
+
+td {
+	width:auto;
+}
+th {
+	width:auto;
+}
+
+th .small {
+	width:1%;
+	white-space: nowrap;
+	align: right;
+}
+td .small {
+	width:1%;
+	white-space: nowrap;
+	align: right;
+}
