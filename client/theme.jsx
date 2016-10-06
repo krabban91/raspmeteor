@@ -42,6 +42,9 @@ modifyMuiTheme = function(){
 		slider:{
 			selectionColor:palette.accent2Color,
 		},
+		datePicker: {
+			selectColor:palette.primary3Color,
+		},
 	};
 	let theme = getMuiTheme(darkBaseTheme, modifications);
 	return theme;

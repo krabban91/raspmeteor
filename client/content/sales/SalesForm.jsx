@@ -12,6 +12,7 @@ import Slider from 'material-ui/Slider';
 import Paper from 'material-ui/Paper';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import DatePicker from 'material-ui/DatePicker';
 
 import ClearIcon from 'react-material-icons/icons/content/clear';
 
@@ -25,17 +26,17 @@ export default class SalesForm extends Component {
 		this.state = {
 			sale: {
 				sellers:[{name:''}], 		//input done
+				sellingDate : new Date(),	//input done
+				totalSellingTime : '',		//input done
+				sellingLocation : "",		//input done
 				soldRasps : 0,		 		//input done
 				noOfStraws : 0.5,	 		//input done
 				swishPayments : 0,	 		//input done
 				iZettlePayments : 0, 		//input done
-				sellingDate : new Date(),
-				sellingLocation : "",
-				totalSellingTime : 0,
-				weather : "",
-				crowdness : "",
-				tactic : "",
-				funLevel : "",
+				weather : "",				//input done
+				crowdness : "",				//input done
+				tactic : "",				//input done
+				funLevel : "",				//input done
 				comments : ""
 			}
 		};
@@ -47,13 +48,11 @@ export default class SalesForm extends Component {
 		let newSale = this.state.sale;
 		newSale.sellers.splice(key,1);
 		this.setState({sale:newSale});
-		console.log(key);
 	}
 	onSellerUpdate = (key, event) => {
 		let newSale = this.state.sale;
 		newSale.sellers[key].name = event.target.value;
 		this.setState({sale:newSale});
-		console.log(key);
 	}
 	onAddSeller = (event) => {
 		let newSale = this.state.sale;
@@ -61,7 +60,30 @@ export default class SalesForm extends Component {
 		this.setState({sale:newSale});
 	}
 	//-----------------------
-	// Sales states
+	// Date information
+	onDateChange = (nell, date) => {
+		let newSale = this.state.sale;
+		newSale.sellingDate = date; 
+		this.setState({sale:newSale});	
+	}
+	isDateInvalid = (date) => {
+		let today = new Date();
+		let dayDiff = (today-date)/(1000*60*60*24);
+		return dayDiff > 30 || dayDiff <-10;
+	}
+	onTimeChange = (event) => {
+		let newSale = this.state.sale;
+		newSale.totalSellingTime = event.target.value;
+		this.setState({sale:newSale});
+	}
+	onPlaceChange = (event) => {
+		let newSale = this.state.sale;
+		newSale.sellingLocation = event.target.value;
+		this.setState({sale:newSale});
+	}
+
+	//-----------------------
+	// Sales stats
 	onRaspsSoldChange = (event) => {
 		if(isNaN(event.target.value)) {return;}
 		let newSale = this.state.sale;
@@ -86,13 +108,40 @@ export default class SalesForm extends Component {
 		newSale.iZettlePayments = value; 
 		this.setState({sale:newSale});
 	}
-
+	//-----------------------
+	// Circumstances
+	onWeatherChange = (event, index, value) => {
+		let newSale = this.state.sale;
+		newSale.weather = value; 
+		this.setState({sale:newSale});	
+	}
+	onCrowdChange = (event, index, value) => {
+		let newSale = this.state.sale;
+		newSale.crowdness = value; 
+		this.setState({sale:newSale});	
+	}
+	onTacticChange = (event, index, value) => {
+		let newSale = this.state.sale;
+		newSale.tactic = value; 
+		this.setState({sale:newSale});	
+	}
+	onFunLevelChange = (event, index, value) => {
+		let newSale = this.state.sale;
+		newSale.funLevel = value; 
+		this.setState({sale:newSale});	
+	}
+	//-----------------------
+	// Other
+	onCommentsChange = (event) => {
+		let newSale = this.state.sale;
+		newSale.funLevel = event.target.value; 
+		this.setState({sale:newSale});	
+	}
 	//-----------------------
 
 	submitForm = (event) => {
 		console.log(this.state.sale);
 		console.log('form submission');
-
 	}
 	
 	render(){	
@@ -103,12 +152,24 @@ export default class SalesForm extends Component {
 				Enkelt att använda osv. 
 				<form onSubmit={this.submitForm}>
 					<Paper className='paperPadding' rounded={false}>
-						<h4>Försäljare</h4>
+						<h4>Vem?</h4>
 						{this.renderSellers(this.state.sale.sellers)}
 					</Paper>
 					<Paper className='paperPadding' rounded={false}>
-						<h4>Försäljning</h4>
+						<h4>När? Var?</h4>
+						{this.renderDate()}
+					</Paper>
+					<Paper className='paperPadding' rounded={false}>
+						<h4>Hur mycket?</h4>
 						{this.renderSalesStats()}
+					</Paper>
+					<Paper className='paperPadding' rounded={false}>
+						<h4>Omständigheter?</h4>
+						{this.renderCircumstances()}
+					</Paper>
+					<Paper className='paperPadding' rounded={false}>
+						<h4>Övrigt</h4>
+						{this.renderRemainders()}
 					</Paper>
 				<RaisedButton
 					label="Registrera"
@@ -123,9 +184,7 @@ export default class SalesForm extends Component {
 			let index = sellers.indexOf(seller);
 			let label = 'Säljare '+(index+1);
 			return (
-				<div
-					key = {index}
-					>
+				<div key = {index} >
 					<TextField
 						floatingLabelText={label}
 						value={seller.name}
@@ -135,7 +194,7 @@ export default class SalesForm extends Component {
 						<IconButton
 							label='-'
 							onTouchTap={this.onSellerRemove.bind(this,index)}
-						>
+							>
 							<ClearIcon/>													
 						</IconButton>)
 					}
@@ -147,6 +206,36 @@ export default class SalesForm extends Component {
 					/>);
 		return (<div>{fields}<br/> {addField}</div>);
 	}
+
+	renderDate() {
+		let sale = this.state.sale;
+		let datePicker = (
+			<DatePicker
+				id='date_picker'
+				key='datepicker'
+				autoOk={true}
+				shouldDisableDate={this.isDateInvalid}
+				value = {sale.sellingDate}
+				onChange = {this.onDateChange}
+				/>
+		);
+		let time = (
+			<TextField
+				floatingLabelText='Hur länge? (t.ex. 1h15m)'
+				value={sale.totalSellingTime}
+				onChange={this.onTimeChange}
+				/>
+		);
+		let place = (
+			<TextField
+				floatingLabelText='Vart? (Vörtpannan, stan, etc.)'
+				value={sale.sellingLocation}
+				onChange={this.onPlaceChange}
+				/>
+		);
+		return (<div> {datePicker} {time} {place}</div>);
+	}
+
 	renderSalesStats(){
 		let possibleSales = _.range(151);
 		let sale = this.state.sale;
@@ -196,7 +285,158 @@ export default class SalesForm extends Component {
 					/>
 			</div>);
 
-		return (<div>{rasps} <br/> {straws} {swish} {iZettle}</div>)
+		return (<div>{rasps} {straws} {swish} {iZettle}</div>);
+	}
+
+
+	renderCircumstances(){
+		let sale = this.state.sale;
+		let weather = (
+			<SelectField 
+				hintText='Hur var vädret?'
+				onChange={this.onWeatherChange}
+				value={sale.weather}
+				>
+				<MenuItem 
+					primaryText=''
+					value=''
+					/>
+				<MenuItem 
+					primaryText='Sol' 
+					value='Sol'
+					/>
+				<MenuItem 
+					primaryText='Uppehåll' 
+					value='Uppehåll'
+					/>
+				<MenuItem 
+					primaryText='Regn' 
+					value='Regn'
+					/>
+				<MenuItem 
+					primaryText='Blåsigt' 
+					value='Blåsigt'
+					/>
+				<MenuItem 
+					primaryText='Snö' 
+					value='Snö'
+					/>
+				<MenuItem 
+					primaryText='Hagel' 
+					value='Hagel'
+					/>
+				<MenuItem 
+					primaryText='Slask' 
+					value='Slask'
+					/>
+			</SelectField>
+		);
+		let crowdness = (
+			<SelectField 
+				hintText='Var det mycket folk?'
+				onChange={this.onCrowdChange}
+				value={sale.crowdness}
+				>
+				<MenuItem 
+					primaryText=''
+					value=''
+					/>
+				<MenuItem 
+					primaryText='Massor' 
+					value='Massor'
+					/>
+				<MenuItem 
+					primaryText='Ganska många' 
+					value='Ganska många'
+					/>
+				<MenuItem 
+					primaryText='Alldeles lagom' 
+					value='Alldeles lagom'
+					/>
+				<MenuItem 
+					primaryText='Några' 
+					value='Några'
+					/>
+				<MenuItem 
+					primaryText='Inte en jävel' 
+					value='Inte en jävel'
+					/>
+			</SelectField>
+		);
+		let tactic = (
+			<SelectField 
+				hintText='Huvudsaklik säljartaktik'
+				onChange={this.onTacticChange}
+				value={sale.tactic}
+				>
+				<MenuItem 
+					primaryText=''
+					value=''
+					/>
+				<MenuItem 
+					primaryText='Övertalning' 
+					value='Övertalning'
+					/>
+				<MenuItem 
+					primaryText='Glad och trevlig' 
+					value='Glad och trevlig'
+					/>
+				<MenuItem 
+					primaryText='Missionerande' 
+					value='Missionerande'
+					/>
+				<MenuItem 
+					primaryText='Ingen särskild' 
+					value='Ingen särskild'
+					/>
+				<MenuItem 
+					primaryText='Inte en jävel' 
+					value='Inte en jävel'
+					/>
+			</SelectField>
+		);
+		let funLevel = (
+			<SelectField 
+				hintText='Hur kul var det?'
+				onChange={this.onFunLevelChange}
+				value={sale.funLevel}
+				>
+				<MenuItem 
+					primaryText=''
+					value=''
+					/>
+				<MenuItem 
+					primaryText='Jävelroligt' 
+					value='Jävelroligt'
+					/>
+				<MenuItem 
+					primaryText='Kul. Punkt.' 
+					value='Kul. Punkt.'
+					/>
+				<MenuItem 
+					primaryText='meh.' 
+					value='meh.'
+					/>
+				<MenuItem 
+					primaryText='Jag ville dö' 
+					value='Jag ville dö'
+					/>
+			</SelectField>
+		);
+		return (<div>{weather} {crowdness} {tactic} {funLevel}</div>)
+	}
+	renderRemainders(){
+		return (
+			<div>
+				<TextField
+					floatingLabelText='Kommentarer/förbättringsåsikter'
+					value={this.state.comments}
+					onChange={this.onCommentsChange}
+					multiLine={true}
+					rowsMax={10}
+					/>		
+			</div>);
+
 	}
 }
 
