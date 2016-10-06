@@ -2,15 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import classnames from 'classnames';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {TableRow, TableRowColumn} from 'material-ui/Table';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
-
-
-
-import MuiTheme from '../../../theme.jsx'
 
 
 export default class HandleUsers extends Component {
@@ -54,6 +49,7 @@ export default class HandleUsers extends Component {
 							<MenuItem
 								key='admin'
 								value='admin'
+								disabled={true}
 								primaryText='Administratör'/>
 						</SelectField>
 					</TableRowColumn>
@@ -69,9 +65,4 @@ export default class HandleUsers extends Component {
 
 	}
 }
-
-	         //<MuiThemeProvider muiTheme={muiTheme}>
-          //	</MuiThemeProvider>
-
-
 

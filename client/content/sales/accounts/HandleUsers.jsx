@@ -3,13 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import classnames from 'classnames';
 import { createContainer } from 'meteor/react-meteor-data';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Table, TableHeader, TableBody, TableRow, TableHeaderColumn} from 'material-ui/Table';
 
 import HandleUserSingle from './HandleUserSingle.jsx';
 
-import MuiTheme from '../../../theme.jsx'
 
 
 export default class HandleUsers extends Component {

@@ -30,14 +30,13 @@ kadira:flow-router		# routing
 
 thereactivestack:blazetoreact
 
-aldeed:autoform
 aldeed:collection2
 aldeed:simple-schema
 check
-notorii:autoform-datetimepicker
-muqube:autoform-nouislider
 
 session
 u2622:persistent-session
 
 brylie:first-user-admin
+
+

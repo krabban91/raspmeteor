@@ -2,13 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import classnames from 'classnames';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import {Session} from 'meteor/session';
 
-import MuiTheme from '../../theme.jsx'
 
 
 export default class LoginForm extends Component {
@@ -45,41 +43,39 @@ export default class LoginForm extends Component {
 
 	render(){
 		return (
-	         <MuiThemeProvider muiTheme={MuiTheme}>
-				<div className = "login-outer" >
-					<div className ="login-inner">
-						<h2>Logga in för att fortsätta</h2>
-						<form onSubmit = {this.submit}>
-							<TextField
-								floatingLabelText="Användarnamn"
-								value={this.state.username}
-								onChange={this.onUsernameChange}
-								fullWidth={true}
-								required={true}
-							/>
-							<br/>
-							<TextField
-								floatingLabelText="Lösenord"
-								type='password'
-								value={this.state.password}
-								onChange={this.onPasswordChange}
-								fullWidth={true}
-								required={true}
-								errorText={this.state.errorText}
-							/>
-							<br/>
-							<RaisedButton
-								label="Logga in"
-								type='submit'
-								primary={true}
-								fullWidth={true}
-							/>
-						</form>
-					</div>
+			<div className = "login-outer" >
+				<div className ="login-inner">
+					<Paper className='paperPadding'>
+					<h2>Logga in för att fortsätta</h2>
+					<form onSubmit = {this.submit}>
+						<TextField
+							floatingLabelText="Användarnamn"
+							value={this.state.username}
+							onChange={this.onUsernameChange}
+							fullWidth={true}
+							required={true}
+						/>
+						<br/>
+						<TextField
+							floatingLabelText="Lösenord"
+							type='password'
+							value={this.state.password}
+							onChange={this.onPasswordChange}
+							fullWidth={true}
+							required={true}
+							errorText={this.state.errorText}
+						/>
+						<br/>
+						<RaisedButton
+							label="Logga in"
+							type='submit'
+							fullWidth={true}
+						/>
+					</form>
+					</Paper>
 				</div>
-          	</MuiThemeProvider>
-			);
+			</div>
+		);
 	}
 }
-
 

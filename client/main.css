@@ -1,14 +1,41 @@
-body {
-	margin: 0px;
-	font-family: Roboto,sans-serif
+
+a {
+  color: #ff4081;
+  text-decoration: none;
 }
+
+a:hover {
+  text-decoration: underline;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+
+  font-family: Roboto,sans-serif;
+  color:#FFFFFF;
+  margin: 0;
+}
+
+body {
+  font-size: 15px;
+  line-height: 24px;
+	background-color: #444444;
+}
+
+/* Used in StylesOverridingCssExample.js */
+.styles-overriding-css-example {
+  width: 50% !important;
+  margin: 0 auto !important;
+  border: 2px solid #FF9800 !important;
+  background-color: #ffd699 !important;
+}
+
 main {
 	margin: 20px;
-}
-
-
-Paper {
-	padding: 20px;
 }
 
 div .login-outer {
@@ -17,6 +44,11 @@ div .login-outer {
 div .login-inner {
 	display: inline-block;
 	min-width: 300px;
+}
+
+div .paper {
+	padding: 25px;
+	margin: 25px;
 }
 
 td {
@@ -35,4 +67,18 @@ td .small {
 	width:1%;
 	white-space: nowrap;
 	align: right;
+}
+
+div .paperPadding {
+	padding: 25px;
+	margin-bottom: 20px;
+}
+div .paperMargin {
+	margin: 25px;
+}
+div .sliderMargin {
+	margin-top: 5px;
+	margin-bottom: 20px;
+	min-width: 255px;
+	max-width: 255px; 
 }

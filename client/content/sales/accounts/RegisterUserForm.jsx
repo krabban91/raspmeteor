@@ -2,12 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import classnames from 'classnames';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-
-import muiTheme from '../../../theme.jsx'
 
 
 export default class RegisterUserForm extends Component {
@@ -44,7 +41,6 @@ export default class RegisterUserForm extends Component {
 
 	render(){
 		return (
-	         <MuiThemeProvider muiTheme={muiTheme}>
 				<div className = "login-outer" >
 					<div className ="login-inner">
 						<h2>Registera en ny användare</h2>
@@ -78,13 +74,11 @@ export default class RegisterUserForm extends Component {
 							<RaisedButton
 								label="Registrera"
 								type='submit'
-								primary={true}
 								fullWidth={true}
 							/>
 						</form>
 					</div>
 				</div>
-          	</MuiThemeProvider>
 			);
 	}
 }

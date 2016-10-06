@@ -21,12 +21,12 @@ const SelectableList = MakeSelectable(List);
 export default class SalesTopBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {open: false};
+    this.state = {
+      open: false, 
+     // muiTheme: this.context.muiTheme,
+    };
   }
 
-  componentDidMount(){
-
-  }
   static propTypes = {
       location : PropTypes.string.isRequired,
   };

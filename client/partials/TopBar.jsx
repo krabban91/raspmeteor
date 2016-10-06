@@ -3,7 +3,6 @@ import React, {Component, PropTypes} from 'react';
 import { Meteor } from 'meteor/meteor';
 
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import {List, ListItem,MakeSelectable} from 'material-ui/List';
@@ -14,7 +13,6 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 
 import AppBar from 'material-ui/AppBar';
-import muiTheme from '../theme.jsx'
 
 const SelectableList = MakeSelectable(List); 
 
@@ -45,14 +43,11 @@ export default class TopBar extends Component {
     } = this.props;
     return (
         <div>
-          <MuiThemeProvider muiTheme={muiTheme}>
             <AppBar
               title="Rasp"
               iconClassNameRight="muidocs-icon-navigation-expand-more"
               onLeftIconButtonTouchTap = {this.handleToggle}
             />
-          </MuiThemeProvider>
-          <MuiThemeProvider muiTheme={muiTheme}>
             <Drawer 
               open={this.state.open}
               >
@@ -113,7 +108,6 @@ export default class TopBar extends Component {
                   : ''
                 }
             </Drawer>
-          </MuiThemeProvider>
         </div>
     );
   }
