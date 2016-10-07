@@ -24,47 +24,98 @@ export default class SalesForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			sale: {
-				sellers:[{name:''}], 		//input done
-				sellingDate : new Date(),	//input done
-				totalSellingTime : '',		//input done
-				sellingLocation : "",		//input done
-				soldRasps : 0,		 		//input done
-				noOfStraws : 0.5,	 		//input done
-				swishPayments : 0,	 		//input done
+			
+				sellers:[{name:''}], 		//input done	//Validation 
+				sellingDate : new Date(),	//input done	
+				totalSellingTime : '',		//input done	//required
+				sellingLocation : "",		//input done	//required
+				soldRasps : 0,		 		//input done	
+				noOfStraws : 0.5,	 		//input done	
+				swishPayments : 0,	 		//input done	(soldrasps>0 -> swish+izettle >0)
 				iZettlePayments : 0, 		//input done
-				weather : "",				//input done
-				crowdness : "",				//input done
-				tactic : "",				//input done
-				funLevel : "",				//input done
-				comments : ""
-			}
+				weather : "",				//input done	//required
+				crowdness : "",				//input done	//required
+				tactic : "",				//input done	//required
+				funLevel : "",				//input done	//required
+				comments : "",				//input done
 		};
+		this.error = {
+			sellers:'',
+			sales:'', 
+			circumstances:'',
+		};
+	}
+
+	submitForm = (event) => {
+		event.preventDefault();
+		//check sellers
+		let sellersValid = this.validateSellersOnSubmit(this.state.sellers); 
+		if(!sellersValid){
+			this.error.sellers='Namn saknas eller tomma fält.';
+			this.setState({sellers:this.state.sellers});
+		}
+		let salesValid = this.validateSalesAndTransactions(
+			this.state.soldRasps, this.state.swishPayments,this.state.iZettlePayments);
+		if(!salesValid){
+			this.error.sales = 'Fel mellan transaktioner och antal raspar sålda.'
+			this.setState({soldRasps:this.state.soldRasps});
+		}
+		let circumstancesValid = this.validateCircumstances(this.state.weather, this.state.crowdness, this.state.tactic, this.state.funLevel);
+		if(!circumstancesValid){
+			this.error.circumstances = 'Välj något bara.';
+			this.setState({weather:this.state.weather});
+		}
+		if(sellersValid && salesValid && circumstancesValid){
+			console.log(this.state);
+			console.log('form submission. well done!');
+		}
+
+	}
+	
+	validateSellersOnSubmit(sellers){
+		return sellers && 
+			sellers.length>0 && 
+			sellers.every((seller) => {return seller.name && seller.name.trim().length>0});
+		
+	}
+	validateSalesAndTransactions(soldRasps, swishs, iZettles){
+		let noTransactions = swishs === 0 && iZettles === 0;
+		let noneSold = soldRasps===0;
+		return noneSold === noTransactions;
+	}
+
+	validateCircumstances(weather, crowdness, tactic, funLevel){
+		return weather ==='' ||
+			crowdness===''||
+			tactic===''||
+			funLevel==='';
 	}
 
 	//-----------------------
 	//Sellers
 	onSellerRemove = (key, event) => {
-		let newSale = this.state.sale;
-		newSale.sellers.splice(key,1);
-		this.setState({sale:newSale});
+		let sellers = this.state.sellers;
+		sellers.splice(key,1);
+		this.error.sellers='';
+			
+		this.setState({sellers:sellers});
 	}
 	onSellerUpdate = (key, event) => {
-		let newSale = this.state.sale;
-		newSale.sellers[key].name = event.target.value;
-		this.setState({sale:newSale});
+		let sellers = this.state.sellers;
+		sellers[key].name = event.target.value;
+		this.error.sellers='';
+		this.setState({sellers:sellers});
 	}
 	onAddSeller = (event) => {
-		let newSale = this.state.sale;
-		newSale.sellers.push({name:''}); 
-		this.setState({sale:newSale});
+		let sellers = this.state.sellers;
+		sellers.push({name:''}); 
+		this.error.sellers='';
+		this.setState({sellers:sellers});
 	}
 	//-----------------------
 	// Date information
 	onDateChange = (nell, date) => {
-		let newSale = this.state.sale;
-		newSale.sellingDate = date; 
-		this.setState({sale:newSale});	
+		this.setState({sellingDate:date});	
 	}
 	isDateInvalid = (date) => {
 		let today = new Date();
@@ -72,77 +123,62 @@ export default class SalesForm extends Component {
 		return dayDiff > 30 || dayDiff <-10;
 	}
 	onTimeChange = (event) => {
-		let newSale = this.state.sale;
-		newSale.totalSellingTime = event.target.value;
-		this.setState({sale:newSale});
+		this.setState({totalSellingTime:event.target.value});
 	}
 	onPlaceChange = (event) => {
-		let newSale = this.state.sale;
-		newSale.sellingLocation = event.target.value;
-		this.setState({sale:newSale});
+		this.setState({sellingLocation:event.target.value});
 	}
 
 	//-----------------------
 	// Sales stats
 	onRaspsSoldChange = (event) => {
-		if(isNaN(event.target.value)) {return;}
-		let newSale = this.state.sale;
-		newSale.soldRasps = event.target.value;
-		newSale.swishPayments = Math.min(newSale.swishPayments, newSale.soldRasps); 
-		newSale.iZettlePayments = Math.min(newSale.iZettlePayments, newSale.soldRasps); 
-		this.setState({sale:newSale});
+		let value = event.target.value;
+		if(isNaN(value)) {return;}
+		this.error.sales='';
+
+		this.setState({soldRasps:value});
+		this.setState({swishPayments:Math.min(this.state.swishPayments, value)});
+		this.setState({iZettlePayments:Math.min(this.state.iZettlePayments,value)});
 	}
 	
 	onStrawsChange = (event, value) => {
-		let newSale = this.state.sale;
-		newSale.noOfStraws = value; 
-		this.setState({sale:newSale});
+		this.setState({noOfStraws:value});
 	}
 	onSwishChange = (event, value) => {
-		let newSale = this.state.sale;
-		newSale.swishPayments = value; 
-		this.setState({sale:newSale});
+		this.error.sales='';
+		this.setState({swishPayments:value});
 	}
 	onIZettleChange = (event, value) => {
-		let newSale = this.state.sale;
-		newSale.iZettlePayments = value; 
-		this.setState({sale:newSale});
+		this.error.sales='';
+		this.setState({iZettlePayments:value});
 	}
 	//-----------------------
 	// Circumstances
 	onWeatherChange = (event, index, value) => {
-		let newSale = this.state.sale;
-		newSale.weather = value; 
-		this.setState({sale:newSale});	
+		this.error.circumstances='';
+		this.setState({weather:value});
+
 	}
 	onCrowdChange = (event, index, value) => {
-		let newSale = this.state.sale;
-		newSale.crowdness = value; 
-		this.setState({sale:newSale});	
+		this.error.circumstances='';
+		this.setState({crowdness:value});	
 	}
 	onTacticChange = (event, index, value) => {
-		let newSale = this.state.sale;
-		newSale.tactic = value; 
-		this.setState({sale:newSale});	
+		this.error.circumstances='';
+		this.setState({tactic:value});	
 	}
 	onFunLevelChange = (event, index, value) => {
-		let newSale = this.state.sale;
-		newSale.funLevel = value; 
-		this.setState({sale:newSale});	
+		this.error.circumstances='';
+		this.setState({funLevel:value});	
 	}
 	//-----------------------
 	// Other
 	onCommentsChange = (event) => {
-		let newSale = this.state.sale;
-		newSale.funLevel = event.target.value; 
-		this.setState({sale:newSale});	
+		this.setState({comments:event.target.value});	
 	}
+
 	//-----------------------
 
-	submitForm = (event) => {
-		console.log(this.state.sale);
-		console.log('form submission');
-	}
 	
 	render(){	
 		return (
@@ -153,7 +189,7 @@ export default class SalesForm extends Component {
 				<form onSubmit={this.submitForm}>
 					<Paper className='paperPadding' rounded={false}>
 						<h4>Vem?</h4>
-						{this.renderSellers(this.state.sale.sellers)}
+						{this.renderSellers()}
 					</Paper>
 					<Paper className='paperPadding' rounded={false}>
 						<h4>När? Var?</h4>
@@ -173,13 +209,15 @@ export default class SalesForm extends Component {
 					</Paper>
 				<RaisedButton
 					label="Registrera"
+					type='submit'
 					/>
 				</form>
 			</div>
 			);
 	}
 
-	renderSellers(sellers){
+	renderSellers(){
+		let sellers = this.state.sellers;
 		let fields = sellers.map((seller) =>{
 			let index = sellers.indexOf(seller);
 			let label = 'Säljare '+(index+1);
@@ -189,6 +227,7 @@ export default class SalesForm extends Component {
 						floatingLabelText={label}
 						value={seller.name}
 						onChange={this.onSellerUpdate.bind(this,index)}
+						required={true}
 						/>
 					{sellers.length==1 ||index==0?'':(
 						<IconButton
@@ -204,11 +243,11 @@ export default class SalesForm extends Component {
 					label="Lägg till säljare"
 					onTouchTap={this.onAddSeller}
 					/>);
-		return (<div>{fields}<br/> {addField}</div>);
+		return (<div>{fields} <div className='error-label'>{this.error.sellers.length==0?'':(<span>{this.error.sellers}</span>)}</div> <br/> {addField} </div>);
 	}
 
 	renderDate() {
-		let sale = this.state.sale;
+		let sale = this.state;
 		let datePicker = (
 			<DatePicker
 				id='date_picker'
@@ -224,6 +263,7 @@ export default class SalesForm extends Component {
 				floatingLabelText='Hur länge? (t.ex. 1h15m)'
 				value={sale.totalSellingTime}
 				onChange={this.onTimeChange}
+				required={true}
 				/>
 		);
 		let place = (
@@ -231,6 +271,7 @@ export default class SalesForm extends Component {
 				floatingLabelText='Vart? (Vörtpannan, stan, etc.)'
 				value={sale.sellingLocation}
 				onChange={this.onPlaceChange}
+				required={true}
 				/>
 		);
 		return (<div> {datePicker} {time} {place}</div>);
@@ -238,16 +279,17 @@ export default class SalesForm extends Component {
 
 	renderSalesStats(){
 		let possibleSales = _.range(151);
-		let sale = this.state.sale;
+		let sale = this.state;
 		let rasps = (<TextField
 						floatingLabelText='Antal raspar sålda'
 						value={sale.soldRasps}
 						onChange={this.onRaspsSoldChange}
+						required={true}
 						/>);
 		
 		let straws = (
 			<div>
-				<label>Antal strån för passet: {sale.noOfStraws}</label>
+				<label>Antal strån/person för passet : {sale.noOfStraws}</label>
 				<Slider 
 					className='sliderMargin'
 					min={0}
@@ -285,22 +327,19 @@ export default class SalesForm extends Component {
 					/>
 			</div>);
 
-		return (<div>{rasps} {straws} {swish} {iZettle}</div>);
+		return (<div>{rasps} {straws} {swish} {iZettle}<div className='error-label'>{this.error.sales.length==0?'':(<span>{this.error.sales}</span>)}</div></div>);
 	}
 
 
 	renderCircumstances(){
-		let sale = this.state.sale;
+		let sale = this.state;
 		let weather = (
 			<SelectField 
 				hintText='Hur var vädret?'
 				onChange={this.onWeatherChange}
 				value={sale.weather}
+				required={true}
 				>
-				<MenuItem 
-					primaryText=''
-					value=''
-					/>
 				<MenuItem 
 					primaryText='Sol' 
 					value='Sol'
@@ -336,6 +375,7 @@ export default class SalesForm extends Component {
 				hintText='Var det mycket folk?'
 				onChange={this.onCrowdChange}
 				value={sale.crowdness}
+				required={true}
 				>
 				<MenuItem 
 					primaryText=''
@@ -368,6 +408,7 @@ export default class SalesForm extends Component {
 				hintText='Huvudsaklik säljartaktik'
 				onChange={this.onTacticChange}
 				value={sale.tactic}
+				required={true}
 				>
 				<MenuItem 
 					primaryText=''
@@ -400,6 +441,7 @@ export default class SalesForm extends Component {
 				hintText='Hur kul var det?'
 				onChange={this.onFunLevelChange}
 				value={sale.funLevel}
+				required={true}
 				>
 				<MenuItem 
 					primaryText=''
@@ -425,6 +467,7 @@ export default class SalesForm extends Component {
 		);
 		return (<div>{weather} {crowdness} {tactic} {funLevel}</div>)
 	}
+
 	renderRemainders(){
 		return (
 			<div>
@@ -433,6 +476,7 @@ export default class SalesForm extends Component {
 					value={this.state.comments}
 					onChange={this.onCommentsChange}
 					multiLine={true}
+					rows={3}
 					rowsMax={10}
 					/>		
 			</div>);

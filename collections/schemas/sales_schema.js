@@ -1,20 +1,12 @@
 
 
 const Schema = {
-  Seller1: {
-    type: String,
+  Sellers: {
+    type: [String],
     materialForm: {
-      floatingLabelText: 'Försäljare 1',
+      floatingLabelText: 'Försäljare',
       hintText: 'Grisen',
-    },
-  },
-  Seller2: {
-    type: String,
-    optional : true,
-    materialForm: {
-      floatingLabelText: "Försäljare 2?",
-      hintText: "Oxen",
-    },
+    }
   },
   SoldRasps: {
     type: Number, 

@@ -69,6 +69,11 @@ td .small {
 	align: right;
 }
 
+div .error-label {
+	color: #FF5050;
+	opacity: 1;
+}
+
 div .paperPadding {
 	padding: 25px;
 	margin-bottom: 20px;
