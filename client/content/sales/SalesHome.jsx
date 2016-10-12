@@ -4,7 +4,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 import classnames from 'classnames';
 
 import { Sales } from '../../../collections/api/sales.js';
-import Sale from './Sale.jsx'
 
 class SalesHome extends Component {
 

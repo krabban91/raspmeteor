@@ -16,7 +16,8 @@
     "react-bootstrap": "^0.30.3",
     "react-dom": "^15.3.1",
     "react-material-icons": "^1.0.1",
-    "react-mounter": "^1.2.0"
+    "react-mounter": "^1.2.0",
+    "recharts": "^0.15.1"
   },
   "devDependencies": {
     "eslint": "^3.5.0",

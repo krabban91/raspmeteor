@@ -3,48 +3,50 @@ import { Meteor } from 'meteor/meteor';
 import classnames from 'classnames';
 import ReactAutoForm from 'meteor-react-autoform';
 
-import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import Paper from 'material-ui/Paper';
-import SelectField from 'material-ui/SelectField';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 
 import ClearIcon from 'react-material-icons/icons/content/clear';
 
-import  Schema  from '../../../collections/schemas/sales_schema.js';
-import { Sales } from '../../../collections/api/sales.js';
+import  Schema  from '../../../../collections/schemas/sales_schema.js';
+import { Sales } from '../../../../collections/api/sales.js';
 
+const initialState = {
+	sellers:[{name:''}], 		//input done	//Validation 
+	sellingDate : new Date(),	//input done	
+	totalSellingTime : '',		//input done	//required
+	sellingLocation : "",		//input done	//required
+	soldRasps : 0,		 		//input done	
+	noOfStraws : 0.5,	 		//input done	
+	swishPayments : 0,	 		//input done	(soldrasps>0 -> swish+izettle >0)
+	iZettlePayments : 0, 		//input done
+	weather : "",				//input done	//required
+	crowdness : "",				//input done	//required
+	tactic : "",				//input done	//required
+	funLevel : "",				//input done	//required
+	comments : "",				//input done
+};
+const initialError = {
+	sellers:'',
+	sales:'', 
+	circumstances:'',
+};
 
 export default class SalesForm extends Component {
 	constructor(props){
 		super(props);
-		this.state = {
-			
-				sellers:[{name:''}], 		//input done	//Validation 
-				sellingDate : new Date(),	//input done	
-				totalSellingTime : '',		//input done	//required
-				sellingLocation : "",		//input done	//required
-				soldRasps : 0,		 		//input done	
-				noOfStraws : 0.5,	 		//input done	
-				swishPayments : 0,	 		//input done	(soldrasps>0 -> swish+izettle >0)
-				iZettlePayments : 0, 		//input done
-				weather : "",				//input done	//required
-				crowdness : "",				//input done	//required
-				tactic : "",				//input done	//required
-				funLevel : "",				//input done	//required
-				comments : "",				//input done
-		};
-		this.error = {
-			sellers:'',
-			sales:'', 
-			circumstances:'',
-		};
+		this.state = initialState;
+		this.error = initialError
 	}
+
 
 	submitForm = (event) => {
 		event.preventDefault();
@@ -67,6 +69,7 @@ export default class SalesForm extends Component {
 		}
 		if(sellersValid && salesValid && circumstancesValid){
 			console.log(this.state);
+			Meteor.call('sales.insert', this.state);
 			console.log('form submission. well done!');
 		}
 
@@ -85,10 +88,10 @@ export default class SalesForm extends Component {
 	}
 
 	validateCircumstances(weather, crowdness, tactic, funLevel){
-		return weather ==='' ||
-			crowdness===''||
-			tactic===''||
-			funLevel==='';
+		return weather !=='' &&
+			crowdness!==''&&
+			tactic!==''&&
+			funLevel!=='';
 	}
 
 	//-----------------------
@@ -120,7 +123,7 @@ export default class SalesForm extends Component {
 	isDateInvalid = (date) => {
 		let today = new Date();
 		let dayDiff = (today-date)/(1000*60*60*24);
-		return dayDiff > 30 || dayDiff <-10;
+		return dayDiff > 30 || dayDiff <-1;
 	}
 	onTimeChange = (event) => {
 		this.setState({totalSellingTime:event.target.value});
@@ -132,13 +135,12 @@ export default class SalesForm extends Component {
 	//-----------------------
 	// Sales stats
 	onRaspsSoldChange = (event) => {
-		let value = event.target.value;
+		let value = event.target.value.trim();
 		if(isNaN(value)) {return;}
 		this.error.sales='';
-
-		this.setState({soldRasps:value});
-		this.setState({swishPayments:Math.min(this.state.swishPayments, value)});
-		this.setState({iZettlePayments:Math.min(this.state.iZettlePayments,value)});
+		this.setState({soldRasps:(value.length>0?parseInt(value):'')});
+		this.setState({swishPayments:Math.min(this.state.swishPayments, Math.floor(value/2))});
+		this.setState({iZettlePayments:Math.min(this.state.iZettlePayments,Math.floor(value/2))});
 	}
 	
 	onStrawsChange = (event, value) => {
@@ -146,28 +148,34 @@ export default class SalesForm extends Component {
 	}
 	onSwishChange = (event, value) => {
 		this.error.sales='';
+		let iZettle = Math.min(this.state.soldRasps-value, this.state.iZettlePayments);
 		this.setState({swishPayments:value});
+		this.setState({iZettlePayments:iZettle});
 	}
 	onIZettleChange = (event, value) => {
 		this.error.sales='';
+		let swish = Math.min(this.state.soldRasps-value, this.state.swishPayments);
 		this.setState({iZettlePayments:value});
+		this.setState({swishPayments:swish});
 	}
 	//-----------------------
 	// Circumstances
-	onWeatherChange = (event, index, value) => {
+	onWeatherChange = (event, value) => {
 		this.error.circumstances='';
+		console.log(event);
+		console.log(value);
 		this.setState({weather:value});
 
 	}
-	onCrowdChange = (event, index, value) => {
+	onCrowdChange = (event, value) => {
 		this.error.circumstances='';
 		this.setState({crowdness:value});	
 	}
-	onTacticChange = (event, index, value) => {
+	onTacticChange = (event, value) => {
 		this.error.circumstances='';
 		this.setState({tactic:value});	
 	}
-	onFunLevelChange = (event, index, value) => {
+	onFunLevelChange = (event, value) => {
 		this.error.circumstances='';
 		this.setState({funLevel:value});	
 	}
@@ -333,139 +341,157 @@ export default class SalesForm extends Component {
 
 	renderCircumstances(){
 		let sale = this.state;
+		const styles = {
+			radiobutton: {
+				marginBottom: 8,
+			}, 
+		};
 		let weather = (
-			<SelectField 
-				hintText='Hur var vädret?'
-				onChange={this.onWeatherChange}
-				value={sale.weather}
-				required={true}
-				>
-				<MenuItem 
-					primaryText='Sol' 
-					value='Sol'
-					/>
-				<MenuItem 
-					primaryText='Uppehåll' 
-					value='Uppehåll'
-					/>
-				<MenuItem 
-					primaryText='Regn' 
-					value='Regn'
-					/>
-				<MenuItem 
-					primaryText='Blåsigt' 
-					value='Blåsigt'
-					/>
-				<MenuItem 
-					primaryText='Snö' 
-					value='Snö'
-					/>
-				<MenuItem 
-					primaryText='Hagel' 
-					value='Hagel'
-					/>
-				<MenuItem 
-					primaryText='Slask' 
-					value='Slask'
-					/>
-			</SelectField>
+			<div>
+				<h5>Hur var vädret?</h5>
+				<RadioButtonGroup
+					name='weatherRadio'
+					valueSelected = {sale.weather}
+					onChange={this.onWeatherChange}
+					>
+					<RadioButton
+						label='Sol' 
+						value='Sol'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Uppehåll' 
+						value='Uppehåll'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Blåsigt' 
+						value='Blåsigt'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Regn' 
+						value='Regn'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Snö' 
+						value='Snö'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Hagel' 
+						value='Hagel'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Slask' 
+						value='Slask'
+						style={styles.radiobutton}
+						/>
+				</RadioButtonGroup>
+			</div>
+
 		);
 		let crowdness = (
-			<SelectField 
-				hintText='Var det mycket folk?'
-				onChange={this.onCrowdChange}
-				value={sale.crowdness}
-				required={true}
-				>
-				<MenuItem 
-					primaryText=''
-					value=''
-					/>
-				<MenuItem 
-					primaryText='Massor' 
-					value='Massor'
-					/>
-				<MenuItem 
-					primaryText='Ganska många' 
-					value='Ganska många'
-					/>
-				<MenuItem 
-					primaryText='Alldeles lagom' 
-					value='Alldeles lagom'
-					/>
-				<MenuItem 
-					primaryText='Några' 
-					value='Några'
-					/>
-				<MenuItem 
-					primaryText='Inte en jävel' 
-					value='Inte en jävel'
-					/>
-			</SelectField>
+			<div>
+				<h5>Antal förbipasserande?</h5>
+				<RadioButtonGroup
+					name='crowdnessRadio'
+					valueSelected = {sale.crowdness}
+					onChange={this.onCrowdChange}
+					>
+					<RadioButton
+						label='Massor' 
+						value='Massor'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Ganska många' 
+						value='Ganska många'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Alldeles lagom' 
+						value='Alldeles lagom'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Några' 
+						value='Några'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Inte en jävel' 
+						value='Inte en jävel'
+						style={styles.radiobutton}
+						/>
+				</RadioButtonGroup>
+			</div>
 		);
 		let tactic = (
-			<SelectField 
-				hintText='Huvudsaklik säljartaktik'
-				onChange={this.onTacticChange}
-				value={sale.tactic}
-				required={true}
-				>
-				<MenuItem 
-					primaryText=''
-					value=''
-					/>
-				<MenuItem 
-					primaryText='Övertalning' 
-					value='Övertalning'
-					/>
-				<MenuItem 
-					primaryText='Glad och trevlig' 
-					value='Glad och trevlig'
-					/>
-				<MenuItem 
-					primaryText='Missionerande' 
-					value='Missionerande'
-					/>
-				<MenuItem 
-					primaryText='Ingen särskild' 
-					value='Ingen särskild'
-					/>
-				<MenuItem 
-					primaryText='Inte en jävel' 
-					value='Inte en jävel'
-					/>
-			</SelectField>
+			<div>
+				<h5>Huvudsaklik säljartaktik?</h5>
+				<RadioButtonGroup
+					name='tacticRadio'
+					valueSelected = {sale.tactic}
+					onChange={this.onTacticChange}
+					>
+					<RadioButton
+						label='Övertalning' 
+						value='Övertalning'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Glad och trevlig' 
+						value='Glad och trevlig'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Missionerande' 
+						value='Missionerande'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Ingen särskild' 
+						value='Ingen särskild'
+						style={styles.radiobutton}
+						/>
+				</RadioButtonGroup>
+			</div>
 		);
 		let funLevel = (
-			<SelectField 
-				hintText='Hur kul var det?'
-				onChange={this.onFunLevelChange}
-				value={sale.funLevel}
-				required={true}
-				>
-				<MenuItem 
-					primaryText=''
-					value=''
-					/>
-				<MenuItem 
-					primaryText='Jävelroligt' 
-					value='Jävelroligt'
-					/>
-				<MenuItem 
-					primaryText='Kul. Punkt.' 
-					value='Kul. Punkt.'
-					/>
-				<MenuItem 
-					primaryText='meh.' 
-					value='meh.'
-					/>
-				<MenuItem 
-					primaryText='Jag ville dö' 
-					value='Jag ville dö'
-					/>
-			</SelectField>
+			<div>
+				<h5>Hur kul var det?</h5>
+				<RadioButtonGroup
+					name='funLevelRadio'
+					valueSelected = {sale.funLevel}
+					onChange={this.onFunLevelChange}
+					>
+					<RadioButton
+						label='Jävelroligt' 
+						value='Jävelroligt'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Kul. Punkt.' 
+						value='Kul. Punkt.'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='meh.' 
+						value='meh.'
+						style={styles.radiobutton}
+						/>
+					<RadioButton
+						label='Jag ville dö' 
+						value='Jag ville dö'
+						style={styles.radiobutton}
+						/>
+				</RadioButtonGroup>
+			</div>			
 		);
-		return (<div>{weather} {crowdness} {tactic} {funLevel}</div>)
+		return (<div>{weather} {crowdness} {tactic} {funLevel}<div className='error-label'>{this.error.circumstances.length==0?'':(<span>{this.error.circumstances}</span>)}</div></div>)
 	}
 
 	renderRemainders(){

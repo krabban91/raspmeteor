@@ -11,7 +11,6 @@ if (Meteor.isServer) {
   Meteor.publish('users', function userPublication(){
   	
   	if(!Roles.userIsInRole(this.userId,['admin'])){
-  		console.log("no users.");
   		this.stop();
   		return;
   	}

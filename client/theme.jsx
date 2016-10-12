@@ -45,6 +45,12 @@ modifyMuiTheme = function(){
 		datePicker: {
 			selectColor:palette.primary3Color,
 		},
+		checkbox: {
+			checkedColor:palette.accent3Color,
+		},
+		radioButton: {
+			checkedColor:palette.accent3Color,
+		},
 	};
 	let theme = getMuiTheme(darkBaseTheme, modifications);
 	return theme;

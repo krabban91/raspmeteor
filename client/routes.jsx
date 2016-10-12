@@ -11,11 +11,10 @@ import Subscribe from './content/subscribe/Subscribe.jsx';
 import Partners from './content/partners/Partners.jsx';
 import Contact from './content/contact/Contact.jsx';
 
-import App from './content/sales/App.jsx';
 import SalesHome from './content/sales/SalesHome.jsx';
-import SalesOverview from './content/sales/SalesOverview.jsx';
-import SalesForm from './content/sales/SalesForm.jsx';
-import LoginForm from './content/sales/LoginForm.jsx';
+import SalesOverview from './content/sales/statistics/SalesOverview.jsx';
+import SalesForm from './content/sales/sale_forms/SalesForm.jsx';
+import LoginForm from './content/sales/accounts/LoginForm.jsx';
 import RegisterUserForm from './content/sales/accounts/RegisterUserForm.jsx';
 import HandleUsers from './content/sales/accounts/HandleUsers.jsx';
 
@@ -166,3 +165,10 @@ FlowRouter.route('/sales/handleusers', {
 		});
 	}
 });
+
+
+FlowRouter.notFound = {
+	action : () => {
+		FlowRouter.go('/');
+	}
+};
