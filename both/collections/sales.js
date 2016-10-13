@@ -1,9 +1,14 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
 
-const Schema = {
+const Sales = new Mongo.Collection('sales');
+const SaleStats = new Mongo.Collection('saleStats');
+const StrawStats = new Mongo.Collection('strawStats');
+
+
+const SalesSchema = new SimpleSchema({
   sellers: {
-    type: [{
-      name:String,
-    }],
+    type: [/*{ name:String,}*/ String],
   },
   soldRasps: {
     type: Number, 
@@ -99,6 +104,9 @@ const Schema = {
     type: Boolean, 
     optional: true,
   }
-};
+});
 
-export default Schema;
+Sales.attachSchema(SalesSchema);
+
+
+export {Sales, SaleStats, StrawStats, SalesSchema};

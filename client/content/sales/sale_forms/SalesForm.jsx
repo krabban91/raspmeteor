@@ -16,8 +16,6 @@ import DatePicker from 'material-ui/DatePicker';
 
 import ClearIcon from 'react-material-icons/icons/content/clear';
 
-import  Schema  from '../../../../collections/schemas/sales_schema.js';
-import { Sales } from '../../../../collections/api/sales.js';
 
 const initialState = {
 	sellers:[{name:''}], 		//input done	//Validation 

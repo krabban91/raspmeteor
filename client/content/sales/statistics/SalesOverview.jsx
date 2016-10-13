@@ -10,7 +10,7 @@ import {grey1000, grey700, grey400, blueA200, blueA400, blueA100, fullWhite} fro
 import {fade} from 'material-ui/utils/colorManipulator';
 
 
-import { Sales, SaleStats, StrawStats } from '../../../../collections/api/sales.js';
+import { Sales, SaleStats, StrawStats } from '/both/collections/sales.js';
 
 import GraphTooltip from './GraphTooltip.jsx'
 import Sale from './Sale.jsx'

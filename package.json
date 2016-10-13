@@ -8,6 +8,7 @@
     "babel-plugin-transform-class-properties": "^6.11.5",
     "bcrypt": "^0.8.7",
     "classnames": "^2.2.5",
+    "fs": "0.0.1-security",
     "material-ui": "^0.15.4",
     "meteor-node-stubs": "~0.2.0",
     "meteor-react-autoform": "^0.3.0",

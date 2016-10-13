@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import classnames from 'classnames';
 
-import { Sales } from '../../../collections/api/sales.js';
 
 class SalesHome extends Component {
 
