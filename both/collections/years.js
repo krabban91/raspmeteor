@@ -5,11 +5,15 @@ const Years = new Mongo.Collection('years');
 
 const YearsSchema = new SimpleSchema({
 	number: {
-		type: String, 
+		type: Number, 
 		optional: false,
 	}, 
 	year: {
 		type: String, 
+		optional: false,
+	},
+	fileName: {
+		type: String,
 		optional: false,
 	}
 });

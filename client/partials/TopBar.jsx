@@ -86,9 +86,10 @@ export default class TopBar extends Component {
                   value={"/contact"}
                   href={"/contact"}
                 />
+                {Meteor.user() ? <Divider/>: ''}
                 {Meteor.user() ?
                   <ListItem 
-                      primaryText="Försäljning"
+                      primaryText="Baksidan"
                       value={"/sales"}
                       href={"/sales"}
                   />

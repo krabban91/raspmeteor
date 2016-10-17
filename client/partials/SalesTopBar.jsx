@@ -61,7 +61,7 @@ export default class SalesTopBar extends Component {
                 onChange={this.handleToggle}
               >
                 <ListItem 
-                  primaryText="Hem" 
+                  primaryText="Hemsidan" 
                   value={"/"} 
                   href={"/"}
                   />
@@ -87,6 +87,35 @@ export default class SalesTopBar extends Component {
                   value={"/sales/handleusers"} 
                   href={"/sales/handleusers"} 
                   />):''}
+                {Meteor.user() && Roles.userIsInRole(Meteor.user(), ['admin']) ? (<ListItem
+                  primaryText="Inställningar hemsidan"
+                  initiallyOpen={false}
+                  primaryTogglesNestedList={true}
+                  nestedItems={[
+                    <ListItem
+                      primaryText="Information"
+                      value={"/sales/settings/information"} 
+                      href={"/sales/settings/information"}
+                    />, 
+                    <ListItem
+                      primaryText="Redax medlemmar"
+                      value={"/sales/settings/redax"} 
+                      href={"/sales/settings/redax"}  
+                    />, 
+                    <ListItem
+                      primaryText="Tidigare Raspbilder"
+                      value={"/sales/settings/images"} 
+                      href={"/sales/settings/images"}
+                    />, 
+                    <ListItem
+                      primaryText="Priser för partners"
+                      value={"/sales/settings/partners"} 
+                      href={"/sales/settings/partners"}
+                    />, 
+                    ]}
+                  /> ):''}
+                
+
               </SelectableList>
               <Divider/>
               <MenuItem 

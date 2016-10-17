@@ -18,6 +18,12 @@ import LoginForm from './content/sales/accounts/LoginForm.jsx';
 import RegisterUserForm from './content/sales/accounts/RegisterUserForm.jsx';
 import HandleUsers from './content/sales/accounts/HandleUsers.jsx';
 
+import ContactSettings from './content/sales/main_page_properties/ContactSettings.jsx';
+import PartnerDeals from './content/sales/main_page_properties/PartnerDeals.jsx';
+import Properties from './content/sales/main_page_properties/Properties.jsx';
+import RaspImages from './content/sales/main_page_properties/RaspImages.jsx';
+
+
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {SalesLayout} from './layouts/SalesLayout.jsx';
 
@@ -161,6 +167,76 @@ FlowRouter.route('/sales/handleusers', {
 		mount(SalesLayout, {
 			location: "/sales/handleusers",
 			content : (<HandleUsers 
+						/>),
+		});
+	}
+});
+
+//Settings main page
+
+FlowRouter.route('/sales/settings/information', {
+	action() {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location: "/sales/settings/information",
+			content : (<Properties 
+						/>),
+		});
+	}
+});
+
+FlowRouter.route('/sales/settings/redax', {
+	action() {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location: "/sales/settings/redax",
+			content : (<ContactSettings 
+						/>),
+		});
+	}
+});
+
+FlowRouter.route('/sales/settings/images', {
+	action() {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location: "/sales/settings/images",
+			content : (<RaspImages 
+						/>),
+		});
+	}
+});
+
+FlowRouter.route('/sales/settings/partners', {
+	action() {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location: "/sales/settings/partners",
+			content : (<PartnerDeals 
 						/>),
 		});
 	}

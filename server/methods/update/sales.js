@@ -12,7 +12,5 @@ Meteor.methods({
 			verified: Boolean,
 		});
 		Sales.update(params.saleId, { $set : {verified : params.verified}});
-
-
 	}
 });

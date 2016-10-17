@@ -90,3 +90,21 @@ div .sliderMargin {
 	min-width: 255px;
 	max-width: 255px; 
 }
+
+div .imageListContainer {
+	flex-grow: 1;
+	overflow: auto;
+	max-height:650px;
+}
+div .editImageContainer {
+	margin-left:15px;
+	margin-right:15px;
+	max-height: 100%;
+	flex-grow: 5;
+	max-height:650px;
+}
+
+div .flexBox {
+	display:flex;
+	height:100%;
+}
