@@ -1,0 +1,9 @@
+for i in `seq 23 152`; do
+   year=$((1864+$i))
+   echo "	{"
+   echo "		number: $i," 
+   echo	"		year: '$year',"
+   echo	"		fileName:'/years/$((year))_front.jpg',"
+   echo	"		smallFileName:'/years/$((year))_tn.gif'"
+   echo "	},"
+   done

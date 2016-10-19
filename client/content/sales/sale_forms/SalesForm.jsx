@@ -9,6 +9,7 @@ import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 import MenuItem from 'material-ui/MenuItem';
@@ -189,33 +190,40 @@ export default class SalesForm extends Component {
 	render(){	
 		return (
 			<div className = "salesForm" >
+				<Paper className='paperPadding paperMargin'>
 				<h2>Försäljningsformulär</h2>
-				här kommer vi ha ett formulär..<br/>
-				Enkelt att använda osv. 
+				<Divider/>
+				Det går snabbt och är enkelt att fylla i formuläret och när försäljningen är verifierad 
+				av Redax så kan man se sin stråstatus under "Överblick".
+				Där är det även möjligt att se hur försäljningen går i stora drag.   
+				</Paper>
 				<form onSubmit={this.submitForm}>
-					<Paper className='paperPadding' rounded={false}>
+					<div className='flexFlow'>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Vem?</h4>
 						{this.renderSellers()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>När? Var?</h4>
 						{this.renderDate()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Hur mycket?</h4>
 						{this.renderSalesStats()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Omständigheter?</h4>
 						{this.renderCircumstances()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Övrigt</h4>
 						{this.renderRemainders()}
 					</Paper>
+					</div>
 				<RaisedButton
 					label="Registrera"
 					type='submit'
+					style={{float:'right', margin:30}}
 					/>
 				</form>
 			</div>

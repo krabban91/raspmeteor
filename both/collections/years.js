@@ -15,6 +15,10 @@ const YearsSchema = new SimpleSchema({
 	fileName: {
 		type: String,
 		optional: false,
+	},
+	smallFileName: {
+		type: String,
+		optional: false,
 	}
 });
 

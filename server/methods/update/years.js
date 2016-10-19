@@ -13,6 +13,6 @@ Meteor.methods({
 			year: String, 
 			fileName: String,
 		});
-		Years.update(image._id, { $set : {number: image.number, year: image.number, fileName: image.fileName}});
+		Years.update(image._id, { $set : {number: image.number, year: image.year, fileName: image.fileName}});
 	}
 });

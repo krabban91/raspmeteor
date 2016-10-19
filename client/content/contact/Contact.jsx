@@ -2,51 +2,126 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
+import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
 
-export default class Contact extends Component {
+import {Card, CardHeader, CardText} from 'material-ui/Card';
+
+import {Redax} from '/both/collections/redax.js';
+import {Properties} from '/both/collections/properties.js';
+
+
+
+class Contact extends Component {
+
+	renderMemberCard(member) {
+		const styles= {
+			header:{
+				padding:10,
+			}
+		}
+		return (
+			<Card key={member._id} className='redaxCard'>
+				<CardHeader className='redaxCardHeader'
+					title={member.title}
+					subtitle={member.name}
+					actAsExpander={true}
+					showExpandableButton={true}
+					style={styles.header}
+					/>
+				<CardText
+					expandable={true}
+					>
+					<Divider/>
+					<table>
+					<tbody>
+						{member.phoneNumber?(<tr><td>Telefon: </td><td>{member.phoneNumber}</td></tr>):(<tr></tr>)}
+						{member.emailAddress && member.emailAddress.trim().length>0?(<tr><td>Email: </td><td>{member.emailAddress}</td></tr>):(<tr></tr>)}
+					</tbody>
+					</table>
+				</CardText>
+			</Card>);
+	}
+
+	renderVisitingAddress() {
+		let address = this.props.properties.visitingAddress; 
+		return (
+			<Paper zDepth={2} className='paperPadding paperMargin flexGrow'>
+				<h2>Besöksaddress</h2>
+				{address.name}<br/>
+				{address.street}<br/>
+				{address.postalInfo}
+			</Paper>);
+	}
+
+	renderPostalAddress() {
+		let address = this.props.properties.invoiceAddress; 
+		return (
+			<Paper zDepth={2} className='paperPadding paperMargin flexGrow'>
+				<h2>Postaddress</h2>
+				{address.name}<br/>
+				{address.street}<br/>
+				{address.postalInfo}
+			</Paper>);
+	}
+
+	renderContactInfo() {
+		let email = this.props.properties.raspEmail; 
+		let phone = this.props.properties.raspPhone; 
+		return (
+			<Paper zDepth={2} className='paperPadding paperMargin flexGrow'>
+				<h2>Kontaktas via</h2>
+				{email?email:''}<br/>
+				{phone?phone:''}
+			</Paper>);
+	}
+
+	renderPaymentMethods() {
+		let methods = this.props.properties.paymentMethods;
+		return (
+			<Paper zDepth={2} className='paperPadding paperMargin flexGrow'>
+				<h2>Betalningsmetoder</h2>
+				{methods.map((method)=> {return (<div key={method.description}>{method.description}: {method.value}</div>)})}
+			</Paper>);
+	}
+
 	render() {
 	    return (
 			<div className="container">
-				
-				<h1>Redax</h1>
-				<div>
-					<h3>RASP-redax</h3>
-					Emil Oförvägen 1A<br/>
-					412 58 Göteborg<br/>
-					Telefon: 031-18 10 22<br/>
-					
-					PlusGiro: 46631-8<br/>
-					rasp @ rasp.chalmers.se
-				</div>
-				<h2>Redax #152 består av följande personer:</h2>
-				<div>
-				  <h3>Chefredaktör</h3>
-					Ebba Mannheimer<br/>
-					0708 - 74 31 73
-				</div>
-				<div>
-					<h3>Kassör</h3>
-					Cajsa Olsson<br/>
-					0768 - 53 34 37
-				</div>
-				<div>
-					<h3>PR-ansvarig</h3>
-					Gabriel Andersson<br/>
-					0705 - 92 65 32
-				</div>
-				<div>
-				  <h3>Redaktör</h3>
-					Olof Henning<br/>
-					0708 - 56 06 69
-				</div>
-				<div>
-					<h3>Redaktör</h3>
-					Daniel Palmqvist
-					<br/>
-					0707 - 98 34 51
-				</div>
-		
+				<Paper className='paperPadding'>
+				<h1>Raspredaktionen</h1>
+				{this.props.properties?(
+					<div className='flexFlow'>
+						{this.props.properties.visitingAddress?this.renderVisitingAddress():''}
+						{this.props.properties.invoiceAddress?this.renderPostalAddress():''}
+						{this.props.properties.raspEmail || this.props.properties.raspPhone?this.renderContactInfo():''}
+						{this.props.properties.paymentMethods?this.renderPaymentMethods():''}
+						
+						<Paper zDepth={2} className='paperPadding paperMargin flexGrow'>
+							<h2>Betaltjänster</h2>
+							PlusGiro: 46631-8<br/>
+							Swish: 123-658 04 19
+						</Paper>
+						</div>):''}
+				</Paper>
+				<Paper className='paperPadding'>
+					<h2>Raspredaktionen #{this.props.properties? this.props.properties.redaxNumber:''}</h2>
+					<Divider/>
+					Består av följade medlemmar
+					<div className='flexCentering'>
+					{this.props.redax.map((member) => {return this.renderMemberCard(member);})}
+					</div>
+				</Paper>
 			</div>
 		);
 	}
 }
+
+export default createContainer(() => {
+	Meteor.subscribe('redax');
+	Meteor.subscribe('properties');
+	return {
+		redax : Redax.find({}, {sort: {roleNumber: 1}}).fetch(),
+		properties : Properties.find().fetch()[0],
+	}
+}, Contact)

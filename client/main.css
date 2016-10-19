@@ -92,19 +92,56 @@ div .sliderMargin {
 }
 
 div .imageListContainer {
-	flex-grow: 1;
+	flex: 1;
 	overflow: auto;
-	max-height:650px;
+	max-height:450px;
 }
+div .imageListPreviousContainer {
+	max-height: 500px;
+	flex: auto;
+	overflow: auto;
+}
+div .imageList{
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-right:5px;
+}
+
 div .editImageContainer {
 	margin-left:15px;
-	margin-right:15px;
 	max-height: 100%;
-	flex-grow: 5;
-	max-height:650px;
+	flex: 3;
+	max-height:450px;
 }
 
 div .flexBox {
 	display:flex;
 	height:100%;
+}
+
+div .flowRight {
+	align:right;
+}
+div .redaxCard {
+	padding-left:5px;
+	padding-right:5px;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+div .viewOldRaspCard {
+	padding:15px;	
+	flex:1;
+	
+}
+
+div .flexFlow {
+	flex: 1;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+div .flexGrow {
+	flex:1;
+	align-items:stretch;
+
 }

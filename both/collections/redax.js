@@ -4,17 +4,11 @@ import { Mongo } from 'meteor/mongo';
 const Redax = new Mongo.Collection('redax');
 
 const RedaxSchema = new SimpleSchema({
-	redaxNumber : {
-		type: String, 
-		optional: false,
-	},
 	roleNumber : {
 		type: Number, 
-		min:1, 
-		max:6,
 		optional: false,
 	},
-	roleName : {
+	title : {
 		type: String, 
 		optional: false,
 	},
