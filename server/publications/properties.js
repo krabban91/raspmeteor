@@ -8,7 +8,6 @@ import {InitPropertiesData} from '/server/init_values/initPropertiesData.js';
 
 Meteor.publish('properties', function propertiesPublication(){
 	let item = Properties.findOne();
-
 	if(!item){
 		check(InitPropertiesData, PropertiesSchema);
 		Properties.insert(InitPropertiesData);
