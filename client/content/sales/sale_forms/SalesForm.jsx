@@ -263,6 +263,8 @@ export default class SalesForm extends Component {
 	renderDate() {
 		let sale = this.state;
 		let datePicker = (
+			<div>
+			{sale.sellingDate?'Försälningsdatum':''}
 			<DatePicker
 				id='date_picker'
 				key='datepicker'
@@ -271,6 +273,7 @@ export default class SalesForm extends Component {
 				value = {sale.sellingDate}
 				onChange = {this.onDateChange}
 				/>
+				</div>
 		);
 		let time = (
 			<TextField

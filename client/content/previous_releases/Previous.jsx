@@ -46,40 +46,38 @@ class Previous extends Component {
 
 	renderViewImageCard(image) {
 		return (
-			<Card className='viewOldRaspCard'>
-				<CardHeader
-					title={<span>#{image.number}</span>}
-					subtitle={image.year}
-					>
-				</CardHeader>
-				<CardMedia >
-					<img src={image.fileName} />
-				</CardMedia>
-			</Card>);
+			<Paper className='viewOldRaspCard'  rounded={false}>
+				<h2>#{image.number}</h2>
+				{image.year}
+				<Divider/>
+				<div className='previousImageContainer'>
+					<img src={image.fileName}  />
+				</div>
+			</Paper>);
 	}
-
+//style={{maxWidth:'auto', width:'auto', minWidth:'auto', }};
 
 	render() {
 	    return (
 			<div className="container">
 	        	
-				<Paper className='paperPadding'>
+				<Paper className='paperPadding' rounded={false}>
 					<h2>Tidigare raspar</h2>
 	        	    <Divider/>
 					Här finner du omslag från tidigare års Raspar.
 	        	</Paper>
 	        	<div className='flexBox'>
-					<div className='imageListPreviousContainer'>
-						<Paper className='imageList'>
-							<SelectableList 
+					<Paper 
+						className='overflowY imageListPreviousContainer paperPadding'
+						rounded={false}
+					>
+						<SelectableList 
 				                value = {this.state.selectedImage}
 				                onChange={this.handleListSelect}
 				              	>
 				                {this.props.images.map((image) => {return this.renderImageListItem(image);})}
 				            </SelectableList>
 	        			</Paper>
-
-		            </div>
 		            <div className='editImageContainer'>
 		            	{this.state.currentImage?this.renderViewImageCard(this.state.currentImage):''}
 	            	</div>

@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import classnames from 'classnames';
 import { createContainer } from 'meteor/react-meteor-data';
 
+import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Table, TableHeader, TableBody, TableRow, TableHeaderColumn} from 'material-ui/Table';
 
@@ -29,7 +30,7 @@ export default class HandleUsers extends Component {
 	render(){
 		return (
 			<div className = "login-outer" >
-				<div className ="login-inner">
+				<Paper className ="login-inner paperPadding">
 					<Table>
 						<TableHeader
 							displaySelectAll={false}
@@ -50,7 +51,7 @@ export default class HandleUsers extends Component {
 								}
 						</TableBody>
 					</Table>
-				</div>
+				</Paper>
 			</div>
 		);
 	}

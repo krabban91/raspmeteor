@@ -8,7 +8,7 @@ const StrawStats = new Mongo.Collection('strawStats');
 
 const SalesSchema = new SimpleSchema({
   sellers: {
-    type: [/*{ name:String,}*/ String],
+    type: [String],
   },
   soldRasps: {
     type: Number, 

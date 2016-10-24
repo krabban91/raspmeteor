@@ -197,23 +197,20 @@ class ContactSettings extends Component {
 	        	</Paper>
 
 				<div className='flexBox'>
-					<div className='imageListContainer'>
-						<Paper className='paperPadding'>
-							<SelectableList 
-				                value = {this.state.selectedImage}
-				                onChange={this.handleListSelect}
-				              	>
-				              	<ListItem 
-				                  primaryText="Lägg till" 
-				                  value={"new"} 
-				                  rightIcon={<AddIcon color={fullWhite}/>}
-				                  />
-        	    				<Divider/>
-				                {this.props.redax.map((member) => {return this.renderRedaxListItem(member);})}
-				            </SelectableList>
-	        			</Paper>
-
-		            </div>
+					<Paper className='overflowY redaxListContainer paperPadding'>
+						<SelectableList 
+			                value = {this.state.selectedImage}
+			                onChange={this.handleListSelect}
+			              	>
+			              	<ListItem 
+			                  primaryText="Lägg till" 
+			                  value={"new"} 
+			                  rightIcon={<AddIcon color={fullWhite}/>}
+			                  />
+    	    				<Divider/>
+			                {this.props.redax.map((member) => {return this.renderRedaxListItem(member);})}
+			            </SelectableList>
+        			</Paper>
 		            <div className='editImageContainer'>
 		            	{this.state.currentRedax?this.renderEditMemberInfo(this.state.currentRedax):''}
 	            	</div>

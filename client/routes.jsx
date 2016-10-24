@@ -20,7 +20,7 @@ import HandleUsers from './content/sales/accounts/HandleUsers.jsx';
 
 import ContactSettings from './content/sales/main_page_properties/ContactSettings.jsx';
 import PartnerDeals from './content/sales/main_page_properties/PartnerDeals.jsx';
-import Properties from './content/sales/main_page_properties/Properties.jsx';
+import EditProperties from './content/sales/main_page_properties/EditProperties.jsx';
 import RaspImages from './content/sales/main_page_properties/RaspImages.jsx';
 
 
@@ -185,7 +185,7 @@ FlowRouter.route('/sales/settings/information', {
 		}
 		mount(SalesLayout, {
 			location: "/sales/settings/information",
-			content : (<Properties 
+			content : (<EditProperties 
 						/>),
 		});
 	}

@@ -28,14 +28,17 @@ const PropertiesSchema = new SimpleSchema({
 	'visitingAddress.name': {
 		type: String, 
 		optional: false,
+		trim:false,
 	},
 	'visitingAddress.street': {
 		type: String, 
 		optional: false,
+		trim:false,
 	},
 	'visitingAddress.postalInfo': {
 		type: String, 
 		optional: false,
+		trim:false,
 	}, 	
 	
 	invoiceAddress: {
@@ -45,32 +48,40 @@ const PropertiesSchema = new SimpleSchema({
 	'invoiceAddress.name': {
 		type: String, 
 		optional: false,
+		trim:false,
 	},
 	'invoiceAddress.street': {
 		type: String, 
 		optional: false,
+		trim:false,
 	}, 	
 	'invoiceAddress.postalInfo': {
 		type: String, 
 		optional: false,
+		trim:false,
 	},
 	paymentMethods :{
 		type: [Object]
 	},
 	'paymentMethods.$.description': {
 		type: String, 
+		optional: true,
+		trim:false,
 	}, 
 	'paymentMethods.$.value': {
 		type: String, 
+		optional: true,
+		trim:false,
 	},
 	raspEmail: {
 		type: String, 
 	},
 	raspPhone: {
-		type: String, 
-	},
-	totalNumberOfRasps: {
 		type: String,
+		trim:false, 
+	},
+	totalAmountOfRasps: {
+		type: Number,
 	}
 });
 

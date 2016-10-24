@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {
 body {
   font-size: 15px;
   line-height: 24px;
-	background-color: #444444;
+  background-color: #444444;
 }
 
 /* Used in StylesOverridingCssExample.js */
@@ -38,7 +38,9 @@ body {
 }
 
 main {
-	margin: 20px;
+
+	margin-left: 20px;
+	margin-top: 20px;
 }
 
 div .login-outer {
@@ -71,6 +73,15 @@ td .small {
 	white-space: nowrap;
 	align: right;
 }
+div .raspParallax {
+	background-image: url('/raspbaravit.png');
+	height: 200px;
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat:no-repeat;
+	background-size: cover; 
+
+}
 
 div .error-label {
 	color: #FF5050;
@@ -80,6 +91,7 @@ div .error-label {
 div .paperPadding {
 	padding: 25px;
 	margin-bottom: 20px;
+	margin-right: 20px;
 }
 div .paperMargin {
 	margin: 25px;
@@ -93,13 +105,24 @@ div .sliderMargin {
 
 div .imageListContainer {
 	flex: 1;
-	overflow: auto;
 	max-height:450px;
+	min-width: 200px;
+}
+div .redaxListContainer {
+	flex: 1;
+	max-height:550px;
+	min-width: 200px;
+}
+div .overflowY {
+	overflow-y:auto;
 }
 div .imageListPreviousContainer {
-	max-height: 500px;
+	min-width: 200px;
+	max-height: 600px;
 	flex: auto;
 	overflow: auto;
+	align-items:stretch;
+
 }
 div .imageList{
 	padding-top:5px;
@@ -108,15 +131,14 @@ div .imageList{
 }
 
 div .editImageContainer {
-	margin-left:15px;
 	max-height: 100%;
 	flex: 3;
-	max-height:450px;
 }
 
 div .flexBox {
 	display:flex;
 	height:100%;
+	align-items:stretch;
 }
 
 div .flowRight {
@@ -145,3 +167,21 @@ div .flexGrow {
 	align-items:stretch;
 
 }
+div .previousImageContainer {
+	margin-top: 5px;
+	margin-bottom: 2px;
+	height: 500px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+div .centerItems {
+	align-items: center;
+}
+img {
+
+	object-fit: contain;
+	max-height: 100%;
+	
+}
+

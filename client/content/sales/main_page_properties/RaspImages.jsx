@@ -188,23 +188,20 @@ class RaspImages extends Component {
 	        	</Paper>
 
 				<div className='flexBox'>
-					<div className='imageListContainer'>
-						<Paper className='imageList'>
-							<SelectableList 
-				                value = {this.state.selectedImage}
-				                onChange={this.handleListSelect}
-				              	>
-				              	<ListItem 
-				                  primaryText="Lägg till" 
-				                  value={"new"} 
-				                  rightIcon={<AddIcon color={fullWhite}/>}
-				                  />
-        	    				<Divider/>
-				                {this.props.images.map((image) => {return this.renderImageListItem(image);})}
-				            </SelectableList>
-	        			</Paper>
-
-		            </div>
+					<Paper className='overflowY imageListContainer paperPadding'>
+						<SelectableList 
+			                value = {this.state.selectedImage}
+			                onChange={this.handleListSelect}
+			              	>
+			              	<ListItem 
+			                  primaryText="Lägg till" 
+			                  value={"new"} 
+			                  rightIcon={<AddIcon color={fullWhite}/>}
+			                  />
+    	    				<Divider/>
+			                {this.props.images.map((image) => {return this.renderImageListItem(image);})}
+			            </SelectableList>
+        			</Paper>
 		            <div className='editImageContainer'>
 		            	{this.state.currentImage?this.renderEditImageInfo(this.state.currentImage):''}
 	            	</div>

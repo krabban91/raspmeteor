@@ -1,7 +1,7 @@
 const InitPropertiesData = {
 	redaxNumber: 152,
 	sellingPeriodStart: new Date('2016-10-01'),
-	sellingPeriodStop: new Date('2016-05-01'),
+	sellingPeriodStop: new Date('2017-05-01'),
 	organizationNumber: '802500-2562',
 	visitingAddress: {
 		name: 'Raspredaktionen',
