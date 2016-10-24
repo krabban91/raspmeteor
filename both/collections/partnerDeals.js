@@ -8,6 +8,14 @@ const PartnerDealsSchema = new SimpleSchema({
 	name: {
 		type: String,
 		optional: false,
+	},
+	size : {
+		type: String, 
+		optional: false,
+	},
+	description : {
+		type: String, 
+		optional: false,
 	}, 
 	price: {
 		type: Number,
