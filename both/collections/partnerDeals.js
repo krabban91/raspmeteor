@@ -9,7 +9,7 @@ const PartnerDealsSchema = new SimpleSchema({
 		type: String,
 		optional: false,
 	},
-	size : {
+	type : {
 		type: String, 
 		optional: false,
 	},

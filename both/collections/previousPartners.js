@@ -9,7 +9,7 @@ const PreviousPartnersSchema = new SimpleSchema({
 		type: String,
 		optional: false,
 	},
-	size : {
+	type : {
 		type: String, 
 		optional: false,
 	},
@@ -18,13 +18,9 @@ const PreviousPartnersSchema = new SimpleSchema({
 		optional: false,
 	},
 	redaxNumber : {
-		type:String, 
+		type: Number, 
 		optional:false,
 	}, 
-	price: {
-		type: Number,
-		optional: false,
-	},
 	fileLocation: {
 		type: String,
 		optional:true,

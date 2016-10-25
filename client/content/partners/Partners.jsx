@@ -64,14 +64,14 @@ class Partners extends Component {
 	}
 
 	renderOldPartnerInfo(partner){
-		return (<div>partner {partner.name}</div>);
+		return (<div key={partner._id}>partner {partner.name}</div>);
 	}
 
 	renderPartnerDealInfo(deal){
-		return (<div>deal {deal.name}</div>);
+		return (<div key={deal._id}>deal {deal.name}</div>);
 	}
 	renderExampleAd(ad){
-		return (<div>ad {ad.name}</div>);
+		return (<div key={ad._id}>ad {ad.name}</div>);
 	}
 
 
@@ -87,7 +87,7 @@ class Partners extends Component {
 					Vi har en trogen skara som läser tidningen varje år, däribland Sveriges konung.
 	        	</Paper>
 	        	<div className='flexFlow'>
-				{this.props.oldPartners && this.props.oldPartners.count>0?(
+				{this.props.oldPartners && this.props.oldPartners.length>0?(
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>Bland våra tidigare samarbetspartners kan nämnas</h3>
 						<div>
@@ -99,7 +99,7 @@ class Partners extends Component {
 		        		</div>
 		        	</Paper>
 		        ):''}
-				{this.props.partnerDeals && this.props.partnerDeals.count>0?(
+				{this.props.partnerDeals && this.props.partnerDeals.length>0?(
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>De olika samarbetsmodellerna vi har kan hittas här</h3>
 		        		<div>
@@ -107,7 +107,7 @@ class Partners extends Component {
 		        		</div>
 		        	</Paper>
 				):''}
-				{this.props.exampleAds && this.props.exampleAds.count>0?(
+				{this.props.exampleAds && this.props.exampleAds.length>0?(
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>Annonsexempel</h3>
 						För att veta om det är aktuellt har vi några exempelannonser här. 
