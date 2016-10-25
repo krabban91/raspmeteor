@@ -64,14 +64,14 @@ class Partners extends Component {
 	}
 
 	renderOldPartnerInfo(partner){
-		return (<div>partner</div>);
+		return (<div>partner {partner.name}</div>);
 	}
 
 	renderPartnerDealInfo(deal){
-		return (<div>deal</div>);
+		return (<div>deal {deal.name}</div>);
 	}
 	renderExampleAd(ad){
-		return (<div>ad</div>);
+		return (<div>ad {ad.name}</div>);
 	}
 
 
@@ -91,19 +91,19 @@ class Partners extends Component {
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>Bland våra tidigare samarbetspartners kan nämnas</h3>
 						<div>
-						{this.props.oldPartners.map((partner) =>{ this.renderOldPartnerInfo(partner)})}
+							Bland våra tidigare samarbetspartners kan nämnas:
+							CING, Jobtop, Rock &amp; Werner, Bergstrands Kafferosteri, Nordstan,  Bengt Frithiofsson med flera. 
+						</div>
+						<div>
+						{this.props.oldPartners.map((partner) =>{ return this.renderOldPartnerInfo(partner)})}
 		        		</div>
 		        	</Paper>
 		        ):''}
-				<div>
-					Bland våra tidigare samarbetspartners kan nämnas:
-					CING, Jobtop, Rock &amp; Werner, Bergstrands Kafferosteri, Nordstan,  Bengt Frithiofsson med flera. 
-				</div>
 				{this.props.partnerDeals && this.props.partnerDeals.count>0?(
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>De olika samarbetsmodellerna vi har kan hittas här</h3>
 		        		<div>
-		        		{this.props.partnerDeals.map((deal) => {this.renderPartnerDealInfo(deal)})}	
+		        		{this.props.partnerDeals.map((deal) => { return this.renderPartnerDealInfo(deal)})}	
 		        		</div>
 		        	</Paper>
 				):''}
@@ -112,66 +112,63 @@ class Partners extends Component {
 						<h3>Annonsexempel</h3>
 						För att veta om det är aktuellt har vi några exempelannonser här. 
 						<div>
-		        			{this.props.exampleAds.map((example) => {this.renderExampleAd(example)})}	
+		        			{this.props.exampleAds.map((example) => { return this.renderExampleAd(example)})}	
 		        		</div>
 		        	</Paper>
 				):''}
 				
-				
 				<Paper className='paperPadding flexGrow' rounded={false}>
-					<h3>Intresserad?</h3>
-					{this.state.hasSubmitted?(<div>
+					{this.state.hasSubmitted?(<h3>
 						Tack för att ni kontaktar oss! Vi kommer att höra av oss så snart vi kan!
-					</div>):(<div>
-					Fyll i information här och så hör vi av oss inom kort!
-					<form onSubmit={this.onSubmitCompany}>
-					<div className='flexFlow'>
-						<div className='flexGrow'>
-							<TextField
-								floatingLabelText='Namn'
-			    				value={this.state.name}
-			    				onChange={this.onNameChange}
-			    				required={true}
-			    				/>
-						</div>
-						<div className='flexGrow'>
-				    		<TextField
-								floatingLabelText='Företag'
-			    				value={this.state.companyName}
-			    				onChange={this.onCompanyChange}
-			    				required={true}
-			    				/>
-						</div>
-						<div className='flexGrow'>
-				    		<TextField
-								floatingLabelText='Telefon'
-			    				value={this.state.phone}
-			    				onChange={this.onPhoneChange}
-			    				/>
-						</div>
-						<div className='flexGrow'>
-				    		<TextField
-								floatingLabelText='Email'
-			    				value={this.state.email}
-			    				onChange={this.onEmailChange}
-			    				/>
-						</div>
-						<div className='flexGrow'>
-			    			<TextField
-								floatingLabelText='Önskemål'
-			    				value={this.state.message}
-			    				onChange={this.onMessageChange}
-			    				multiLine={true}
-			    				/>
+					</h3>):(<div>
+						<h3>Intresserad?</h3>
+						Fyll i information här och så hör vi av oss inom kort!
+						<form onSubmit={this.onSubmitCompany}>
+						<div className='flexFlow'>
+							<div className='flexGrow'>
+								<TextField
+									floatingLabelText='Namn'
+				    				value={this.state.name}
+				    				onChange={this.onNameChange}
+				    				required={true}
+				    				/>
+							</div>
+							<div className='flexGrow'>
+					    		<TextField
+									floatingLabelText='Företag'
+				    				value={this.state.companyName}
+				    				onChange={this.onCompanyChange}
+				    				required={true}
+				    				/>
+							</div>
+							<div className='flexGrow'>
+					    		<TextField
+									floatingLabelText='Telefon'
+				    				value={this.state.phone}
+				    				onChange={this.onPhoneChange}
+				    				/>
+							</div>
+							<div className='flexGrow'>
+					    		<TextField
+									floatingLabelText='Email'
+				    				value={this.state.email}
+				    				onChange={this.onEmailChange}
+				    				/>
+							</div>
+							<div className='flexGrow'>
+				    			<TextField
+									floatingLabelText='Önskemål'
+				    				value={this.state.message}
+				    				onChange={this.onMessageChange}
+				    				multiLine={true}
+				    				/>
+					    	</div>
 				    	</div>
-			    	</div>
-					<div className='flexGrow'>
 		    			<RaisedButton
 		    				label='Skicka in'
 		    				type='submit'
 		    				/>
-			    	</div>
-			    	</form>
+				    	</form>
 					</div>)}
 		        </Paper>
 		        </div>
@@ -185,7 +182,7 @@ export default createContainer(()=> {
 	Meteor.subscribe('partnerDeals');
 	Meteor.subscribe('exampleAds');
 	return {
-		oldPartners : PreviousPartners.find({},{sort:{redaxNumber:-1}}),
+		oldPartners : PreviousPartners.find({},{sort:{redaxNumber:-1}}).fetch(),
 		partnerDeals : PartnerDeals.find({},{sort:{price:1}}).fetch(),
 		exampleAds : ExampleAds.find({},{sort:{name:1}}).fetch(),
 

@@ -19,7 +19,7 @@ import RegisterUserForm from './content/sales/accounts/RegisterUserForm.jsx';
 import HandleUsers from './content/sales/accounts/HandleUsers.jsx';
 
 import ContactSettings from './content/sales/main_page_properties/ContactSettings.jsx';
-import PartnerDeals from './content/sales/main_page_properties/PartnerDeals.jsx';
+import EditPartnerDeals from './content/sales/main_page_properties/EditPartnerDeals.jsx';
 import EditProperties from './content/sales/main_page_properties/EditProperties.jsx';
 import RaspImages from './content/sales/main_page_properties/RaspImages.jsx';
 
@@ -236,7 +236,7 @@ FlowRouter.route('/sales/settings/partners', {
 		}
 		mount(SalesLayout, {
 			location: "/sales/settings/partners",
-			content : (<PartnerDeals 
+			content : (<EditPartnerDeals 
 						/>),
 		});
 	}

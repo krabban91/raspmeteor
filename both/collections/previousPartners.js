@@ -24,6 +24,10 @@ const PreviousPartnersSchema = new SimpleSchema({
 	price: {
 		type: Number,
 		optional: false,
+	},
+	fileLocation: {
+		type: String,
+		optional:true,
 	}
 
 });
