@@ -17,6 +17,10 @@ const GoalsSchema = new SimpleSchema({
 		type: String, 
 		optional: false,
 	}, 
+	isAchieved : {
+		type: String,
+		optional:true, 
+	}
 
 });
 
