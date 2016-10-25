@@ -7,16 +7,18 @@ const PotentialPartnersSchema = new SimpleSchema({
 	name : {
 		type : String, 
 		optional : false,
-		trim : false,
 	},
 	companyName : {
 		type : String, 
 		optional : false,
-		trim : false,
 	},
 	email : {
 		type : String,
-		optional: false,
+		optional: true,
+	},
+	phone : {
+		type : String,
+		optional: true,
 	},
 	message : {
 		type : String,

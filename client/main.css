@@ -167,6 +167,11 @@ div .flexGrow {
 	align-items:stretch;
 
 }
+div .flexGrowWide {
+	flex:2;
+	align-items:stretch;
+
+}
 div .previousImageContainer {
 	margin-top: 5px;
 	margin-bottom: 2px;
