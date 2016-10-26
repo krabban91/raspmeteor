@@ -19,8 +19,12 @@ body, h1, h2, h3, h4, h5, h6 {
   color:#FFFFFF;
   margin: 0;
 }
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h5, h6 {
 	margin-bottom: 15px;
+}
+
+h4 {
+	margin-top: 10px;
 }
 
 body {
@@ -160,6 +164,9 @@ div .flexFlow {
 	flex: 1;
 	display: flex;
 	flex-wrap: wrap;
+}
+div .vertical {
+	flex-direction: column;
 }
 
 div .flexGrow {

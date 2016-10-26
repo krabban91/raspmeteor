@@ -23,6 +23,7 @@ import EditPartnerDeals from './content/sales/main_page_properties/EditPartnerDe
 import EditProperties from './content/sales/main_page_properties/EditProperties.jsx';
 import RaspImages from './content/sales/main_page_properties/RaspImages.jsx';
 
+import EditSaleSettings from './content/sales/settings/EditSaleSettings.jsx';
 
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {SalesLayout} from './layouts/SalesLayout.jsx';
@@ -241,6 +242,23 @@ FlowRouter.route('/sales/settings/partners', {
 		});
 	}
 });
+FlowRouter.route('/sales/settings/sale', {
+	action() {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location: "/sales/settings/sale",
+			content : (<EditSaleSettings 
+						/>),
+		});
+	}
+});
+
 
 
 FlowRouter.notFound = {

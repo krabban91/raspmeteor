@@ -6,6 +6,8 @@ import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import {Card, CardHeader, CardText, CardMedia} from 'material-ui/Card';
+
 
 import {PreviousPartners} from '/both/collections/previousPartners.js';
 import {PartnerDeals} from '/both/collections/partnerDeals.js';
@@ -63,15 +65,57 @@ class Partners extends Component {
 		this.setState({hasSubmitted:true,name:'',companyName:'',email:'',phone:'',message:''});
 	}
 
-	renderOldPartnerInfo(partner){
-		return (<div key={partner._id}>partner {partner.name}</div>);
+	renderOldPartnerInfo(old){
+		return (
+			<Card key={old._id}>
+				<CardHeader title={old.name} subtitle={<span>#{old.redaxNumber}</span>} actAsExpander={true} showExpandableButton={true}/>
+				{old.fileLocation&&old.fileLocation.length>0?
+					<CardMedia expandable={true}>
+						<img src={old.fileLocation} />
+					</CardMedia>
+					:''}
+				<CardText expandable={true}>
+					<div>
+					<h4>{old.type}</h4>
+					{old.description}
+					</div>
+					<div>
+						<i>samarbetspartners årgång #{old.redaxNumber}</i>					
+					</div>
+				</CardText>
+			</Card>);
 	}
 
 	renderPartnerDealInfo(deal){
-		return (<div key={deal._id}>deal {deal.name}</div>);
+		return (
+			<Card key={deal._id}>
+				<CardHeader title={deal.name} subtitle={deal.type} actAsExpander={true} showExpandableButton={true}/>
+				<CardText expandable={true}>
+					<div>
+						{deal.description}
+					</div>
+					<div>
+						<h4>Pris</h4>
+						{deal.price} SEK
+					</div>
+				</CardText>
+			</Card>);
 	}
 	renderExampleAd(ad){
-		return (<div key={ad._id}>ad {ad.name}</div>);
+		return (
+			<Card key={ad._id}>
+				<CardHeader title={ad.name} actAsExpander={true} showExpandableButton={true}/>
+				{ad.fileLocation&&ad.fileLocation.length>0?
+					<CardMedia expandable={true}>
+						<img src={ad.fileLocation} />
+					</CardMedia>
+					:''}
+				<CardText expandable={true}>
+					<div>
+						{ad.description}
+					</div>
+				</CardText>
+			</Card>);
 	}
 
 
@@ -86,16 +130,12 @@ class Partners extends Component {
 					Då finns möjligheten att annonsera i studentpublikationen Rasp! 
 					Vi har en trogen skara som läser tidningen varje år, däribland Sveriges konung.
 	        	</Paper>
-	        	<div className='flexFlow'>
+	        	<div className='flexFlow vertical'>
 				{this.props.oldPartners && this.props.oldPartners.length>0?(
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>Bland våra tidigare samarbetspartners kan nämnas</h3>
 						<div>
-							Bland våra tidigare samarbetspartners kan nämnas:
-							CING, Jobtop, Rock &amp; Werner, Bergstrands Kafferosteri, Nordstan,  Bengt Frithiofsson med flera. 
-						</div>
-						<div>
-						{this.props.oldPartners.map((partner) =>{ return this.renderOldPartnerInfo(partner)})}
+							{this.props.oldPartners.map((partner) =>{ return this.renderOldPartnerInfo(partner)})}
 		        		</div>
 		        	</Paper>
 		        ):''}
@@ -103,14 +143,13 @@ class Partners extends Component {
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>De olika samarbetsmodellerna vi har kan hittas här</h3>
 		        		<div>
-		        		{this.props.partnerDeals.map((deal) => { return this.renderPartnerDealInfo(deal)})}	
+		        			{this.props.partnerDeals.map((deal) => { return this.renderPartnerDealInfo(deal)})}	
 		        		</div>
 		        	</Paper>
 				):''}
 				{this.props.exampleAds && this.props.exampleAds.length>0?(
 					<Paper className='paperPadding flexGrow' rounded={false}>
 						<h3>Annonsexempel</h3>
-						För att veta om det är aktuellt har vi några exempelannonser här. 
 						<div>
 		        			{this.props.exampleAds.map((example) => { return this.renderExampleAd(example)})}	
 		        		</div>

@@ -114,6 +114,12 @@ export default class SalesTopBar extends Component {
                     />, 
                     ]}
                   /> ):''}
+                {Meteor.user() && Roles.userIsInRole(Meteor.user(), ['admin']) ? (
+                  <ListItem 
+                  primaryText="Inställningar försäljning" 
+                  value={"/sales/settings/sale"} 
+                  href={"/sales/settings/sale"} 
+                  />):''}
                 
 
               </SelectableList>
