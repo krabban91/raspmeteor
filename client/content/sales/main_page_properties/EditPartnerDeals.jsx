@@ -251,7 +251,7 @@ class EditPartnerDeals extends Component {
 				</div>
 				<div className='flexGrow'>
 					<TextField
-	    	    		value={example.fileLocation}
+	    	    		value={example.fileLocation?example.fileLocation:''}
 	    	    		onChange={this.onEditExampleFileLocation}
 						floatingLabelText='bildfil i /public'
 	    	    		/>
@@ -273,8 +273,124 @@ class EditPartnerDeals extends Component {
 		</div>);
 	}
 
+	
+	onEditPreviousName = (event) => {
+		let old = this.state.currentPrevious;
+		old.name=event.target.value
+		this.setState({currentPrevious:old});
+		Meteor.call('previousPartners.update', old);
+	}
+	
+	onEditPreviousType = (event) => {
+		let old = this.state.currentPrevious;
+		old.type=event.target.value
+		this.setState({currentPrevious:old});
+		Meteor.call('previousPartners.update', old);
+	}
+	
+	onEditPreviousDescription = (event) => {
+		let old = this.state.currentPrevious;
+		old.description=event.target.value
+		this.setState({currentPrevious:old});
+		Meteor.call('previousPartners.update', old);
+	}
+	
+	onEditPreviousRedaxNumber = (event) => {
+		let old = this.state.currentPrevious;
+		old.redaxNumber=event.target.value
+		this.setState({currentPrevious:old});
+		Meteor.call('previousPartners.update', old);
+	}
+	
+	onEditPreviousFileLocation = (event) => {
+		let old = this.state.currentPrevious;
+		old.fileLocation=event.target.value
+		this.setState({currentPrevious:old});
+		Meteor.call('previousPartners.update', old);
+	}
+	
+
+	handleRemovePreviousButton = () => {
+		this.setState({previousDialogOpen:true});
+	}
+	handleRemovePreviousCancel = () => {
+		this.setState({previousDialogOpen:false});
+	}
+	handleRemovePreviousConfirm = () => {
+		Meteor.call('previousPartners.remove', this.state.selectedPrevious);
+		this.setState({previousDialogOpen:false, selectedPrevious:'', currentPrevious: undefined});
+	}
+
+
 	renderEditPreviousCard(previous){
-		return (<div>edit {previous.name}</div>);
+		const modalStyle =  {
+			width:'100%', 
+			maxWidth:'none',
+		};
+		const actionButtons = [
+			<FlatButton
+				label="Avbryt"
+				onTouchTap={this.handleRemovePreviousCancel}
+				/>,
+			<FlatButton
+				label="Fortsätt"
+				onTouchTap={this.handleRemovePreviousConfirm}
+				/>
+		];
+
+		return (<div className='paperMargin'>
+			<div className='flexFlow'>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={previous.name}
+	    	    		onChange={this.onEditPreviousName}
+						floatingLabelText='Namn på partner'
+	    	    		/>
+				</div>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={previous.type}
+	    	    		onChange={this.onEditPreviousType}
+						floatingLabelText='Typ av annons'
+	    	    		/>
+				</div>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={previous.description}
+	    	    		onChange={this.onEditPreviousDescription}
+						floatingLabelText='Beskrivning av annons'
+						multiLine={true}
+	    	    		/>
+				</div>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={previous.redaxNumber}
+	    	    		onChange={this.onEditPreviousRedaxNumber}
+						floatingLabelText='Årgång (#152?)'
+	    	    		/>
+				</div>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={previous.fileLocation?previous.fileLocation:''}
+	    	    		onChange={this.onEditPreviousFileLocation}
+						floatingLabelText='bildfil i /public'
+	    	    		/>
+				</div>
+			</div>
+			<RaisedButton 
+	    		onTouchTap={this.handleRemovePreviousButton}
+	    		label='Ta bort'
+				/>
+			<Dialog
+	    		title={'Ta bort entitet : '+previous._id}
+	    		modal={true}
+	    		open={this.state.previousDialogOpen}
+	    		contentStyle={modalStyle}
+	    		actions={actionButtons}
+	    		>
+	    		Är du säker på att du vill ta bort denna deal? 
+	    	</Dialog>
+		</div>);
 	}
 
 	render () {
