@@ -38,8 +38,8 @@ class SalesHome extends Component {
 				{Roles.userIsInRole(Meteor.user(),['admin', 'seller']) && this.props.news?(
 					<Paper className ='paperPadding'>
 						{this.props.news.map((info)=>{return this.renderNewsPost(info);})}
-						<Divider/>
 						{this.props.settings && this.props.salesInfo && this.props.news?(<div className='flexFlow'>
+						<Divider/>
 							<table className='fill'><tbody><tr>
 								<td>Totalt antal nyheter: {this.props.news.length}</td>
 								<td>Säljstart: {moment(this.props.settings.sellingPeriodStart).calendar()}</td>

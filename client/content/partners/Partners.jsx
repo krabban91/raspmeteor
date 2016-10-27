@@ -103,7 +103,8 @@ class Partners extends Component {
 	}
 	renderExampleAd(ad){
 		return (
-			<Card key={ad._id}>
+			<Paper className='pad1' key={ad._id}>
+			<Card expandable={true}>
 				<CardHeader title={ad.name} actAsExpander={true} showExpandableButton={true}/>
 				{ad.fileLocation&&ad.fileLocation.length>0?
 					<CardMedia expandable={true}>
@@ -111,11 +112,11 @@ class Partners extends Component {
 					</CardMedia>
 					:''}
 				<CardText expandable={true}>
-					<div>
-						{ad.description}
-					</div>
+					{ad.description}
 				</CardText>
-			</Card>);
+			</Card>
+			</Paper>);
+
 	}
 
 
@@ -148,9 +149,9 @@ class Partners extends Component {
 		        	</Paper>
 				):''}
 				{this.props.exampleAds && this.props.exampleAds.length>0?(
-					<Paper className='paperPadding flexGrow' rounded={false}>
+					<Paper className='paperPadding flexGrow overflowY' rounded={false}>
 						<h3>Annonsexempel</h3>
-						<div>
+						<div className='overflowY'>
 		        			{this.props.exampleAds.map((example) => { return this.renderExampleAd(example)})}	
 		        		</div>
 		        	</Paper>

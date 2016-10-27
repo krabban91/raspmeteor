@@ -59,6 +59,9 @@ div .paper {
 	padding: 25px;
 	margin: 25px;
 }
+div .pad1 {
+	padding:1px;
+}
 
 .fill {
 	width:100%;
