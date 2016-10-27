@@ -18,9 +18,13 @@ const GoalsSchema = new SimpleSchema({
 		optional: false,
 	}, 
 	isAchieved : {
-		type: String,
+		type: Boolean,
 		optional:true, 
-	}
+	},
+	dateAchieved : {
+		type: Date, 
+		optional:true,
+	},
 
 });
 

@@ -118,40 +118,41 @@ class RaspImages extends Component {
 			<Paper className='paperPadding'>
         	    <h3>Database entry: {image._id}</h3>
         	    <Divider/>
-    	    	
-    	    	<div>
-    	    	<TextField
-    	    		value={image.number}
-    	    		onChange={this.onEditNumber}
-					floatingLabelText='Nummer (#)'
-    	    		/>
-    	    	</div>
-    	    	<div>
-    	    	<TextField
-    	    		value={image.year}
-    	    		onChange={this.onEditYear}
-					floatingLabelText='Årtal (1864)'
-    	    		/>
-    	    	</div>
-    	    	<div>
-       	    	<TextField
-    	    		value={image.fileName}
-    	    		onChange={this.onEditFileName}
-					floatingLabelText='Filnamn (Medel upplösning)'
-    	    		/>
-    	    	</div>
-    	    	<div>
-       	    	<TextField
-    	    		value={image.smallFileName}
-    	    		onChange={this.onEditSmallFileName}
-					floatingLabelText='Filnamn (Låg upplösning)'
-    	    		/>
-    	    	</div>
-    	    	<div>
-    	    	<RaisedButton
-    	    		onTouchTap={this.handleRemoveButton}
-    	    		label='Ta bort'/>
+    	    	<div className='flexFlow'>
+	    	    	<div className='flexGrow'>
+	    	    	<TextField
+	    	    		value={image.number}
+	    	    		onChange={this.onEditNumber}
+						floatingLabelText='Nummer (#)'
+	    	    		/>
+	    	    	</div>
+	    	    	<div className='flexGrow'>
+	    	    	<TextField
+	    	    		value={image.year}
+	    	    		onChange={this.onEditYear}
+						floatingLabelText='Årtal (1864)'
+	    	    		/>
+	    	    	</div>
+	    	    	<div className='flexGrow'>
+	       	    	<TextField
+	    	    		value={image.fileName}
+	    	    		onChange={this.onEditFileName}
+						floatingLabelText='Filnamn (Medel upplösning)'
+	    	    		/>
+	    	    	</div>
+	    	    	<div className='flexGrow'>
+	       	    	<TextField
+	    	    		value={image.smallFileName}
+	    	    		onChange={this.onEditSmallFileName}
+						floatingLabelText='Filnamn (Låg upplösning)'
+	    	    		/>
+	    	    	</div>
     	      	</div>
+				<div className='flowInverseRow'>
+    		    	<RaisedButton
+	    	    		onTouchTap={this.handleRemoveButton}
+	    	    		label='Ta bort'/>
+	    		</div>
     	    	<Dialog
     	    		title={'Ta bort entitet : '+image._id}
     	    		modal={true}

@@ -125,46 +125,48 @@ class ContactSettings extends Component {
         	    <h3>Database entry: {member._id}</h3>
         	    <Divider/>
     	    	
-    	    	<div>
-    	    	<TextField
-    	    		value={member.roleNumber}
-    	    		onChange={this.onEditNumber}
-					floatingLabelText='Nummer (ordf = 1)'
-    	    		/>
+    	    	<div className='flexFlow'>
+	    	    	<div className='flexGrow'>
+		    	    	<TextField
+		    	    		value={member.roleNumber}
+		    	    		onChange={this.onEditNumber}
+							floatingLabelText='Nummer (ordf = 1)'
+		    	    		/>
+	    	    	</div>
+	    	    	<div className='flexGrow'>
+		    	    	<TextField
+		    	    		value={member.title}
+		    	    		onChange={this.onEditTitle}
+							floatingLabelText='Titel (PR-chef)'
+		    	    		/>
+	    	    	</div>
+	    	    	<div className='flexGrow'>
+		       	    	<TextField
+		    	    		value={member.name}
+		    	    		onChange={this.onEditName}
+							floatingLabelText='Namn (Adrian Scrubbinsson)'
+		    	    		/>
+	    	    	</div>
+	    	    	<div className='flexGrow'>
+		       	    	<TextField
+		    	    		value={member.emailAddress?member.emailAddress:''}
+		    	    		onChange={this.onEditEmail}
+							floatingLabelText='Mailaddress (rasp@redax.se)'
+		    	    		/>
+	    	    	</div>
+	    	    	<div className='flexGrow'>
+		       	    	<TextField
+		    	    		value={member.phoneNumber?member.phoneNumber:''}
+		    	    		onChange={this.onEditPhone}
+							floatingLabelText='Telefonnummer (###-### ## ##)'
+		    	    		/>
+	    	    	</div>
     	    	</div>
-    	    	<div>
-    	    	<TextField
-    	    		value={member.title}
-    	    		onChange={this.onEditTitle}
-					floatingLabelText='Titel (PR-chef)'
-    	    		/>
+				<div className='flowInverseRow'>	
+	    	    	<RaisedButton
+	    	    		onTouchTap={this.handleRemoveButton}
+	    	    		label='Ta bort'/>
     	    	</div>
-    	    	<div>
-       	    	<TextField
-    	    		value={member.name}
-    	    		onChange={this.onEditName}
-					floatingLabelText='Namn (Adrian Scrubbinsson)'
-    	    		/>
-    	    	</div>
-    	    	<div>
-       	    	<TextField
-    	    		value={member.emailAddress?member.emailAddress:''}
-    	    		onChange={this.onEditEmail}
-					floatingLabelText='Mailaddress (rasp@redax.se)'
-    	    		/>
-    	    	</div>
-    	    	<div>
-       	    	<TextField
-    	    		value={member.phoneNumber?member.phoneNumber:''}
-    	    		onChange={this.onEditPhone}
-					floatingLabelText='Telefonnummer (###-### ## ##)'
-    	    		/>
-    	    	</div>
-    	    	<div>
-    	    	<RaisedButton
-    	    		onTouchTap={this.handleRemoveButton}
-    	    		label='Ta bort'/>
-    	      	</div>
     	    	<Dialog
     	    		title={'Ta bort entitet : '+member._id}
     	    		modal={true}

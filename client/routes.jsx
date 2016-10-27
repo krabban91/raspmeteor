@@ -23,7 +23,7 @@ import EditPartnerDeals from './content/sales/main_page_properties/EditPartnerDe
 import EditProperties from './content/sales/main_page_properties/EditProperties.jsx';
 import RaspImages from './content/sales/main_page_properties/RaspImages.jsx';
 
-import EditSaleSettings from './content/sales/settings/EditSaleSettings.jsx';
+import EditSaleSettings from './content/sales/sales_properties/EditSaleSettings.jsx';
 
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {SalesLayout} from './layouts/SalesLayout.jsx';

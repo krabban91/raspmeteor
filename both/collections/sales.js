@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 
 const Sales = new Mongo.Collection('sales');
 const SaleStats = new Mongo.Collection('saleStats');
+const SalesTotal = new Mongo.Collection('salesTotal');
 const StrawStats = new Mongo.Collection('strawStats');
 
 
@@ -109,4 +110,4 @@ const SalesSchema = new SimpleSchema({
 Sales.attachSchema(SalesSchema);
 
 
-export {Sales, SaleStats, StrawStats, SalesSchema};
+export {Sales, SalesTotal, SaleStats, StrawStats, SalesSchema};

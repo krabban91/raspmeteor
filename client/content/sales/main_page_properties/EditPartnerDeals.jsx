@@ -168,10 +168,12 @@ class EditPartnerDeals extends Component {
 	    	    		/>
 				</div>
 			</div>
-			<RaisedButton 
-	    		onTouchTap={this.handleRemoveDealButton}
-	    		label='Ta bort'
-				/>
+			<div className='flowInverseRow'>	
+				<RaisedButton 
+		    		onTouchTap={this.handleRemoveDealButton}
+		    		label='Ta bort'
+					/>
+			</div>
 			<Dialog
 	    		title={'Ta bort entitet : '+deal._id}
 	    		modal={true}
@@ -257,10 +259,12 @@ class EditPartnerDeals extends Component {
 	    	    		/>
 				</div>
 			</div>
-			<RaisedButton 
-	    		onTouchTap={this.handleRemoveExampleButton}
-	    		label='Ta bort'
-				/>
+			<div className='flowInverseRow'>	
+				<RaisedButton 
+		    		onTouchTap={this.handleRemoveExampleButton}
+		    		label='Ta bort'
+					/>
+			</div>
 			<Dialog
 	    		title={'Ta bort entitet : '+example._id}
 	    		modal={true}
@@ -377,10 +381,13 @@ class EditPartnerDeals extends Component {
 	    	    		/>
 				</div>
 			</div>
-			<RaisedButton 
-	    		onTouchTap={this.handleRemovePreviousButton}
-	    		label='Ta bort'
-				/>
+			<div className='flowInverseRow'>	
+				<RaisedButton 
+		    		onTouchTap={this.handleRemovePreviousButton}
+		    		label='Ta bort'
+					/>
+			</div>
+			
 			<Dialog
 	    		title={'Ta bort entitet : '+previous._id}
 	    		modal={true}

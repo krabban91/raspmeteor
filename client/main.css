@@ -197,3 +197,7 @@ img {
 	
 }
 
+div .flowInverseRow {
+	display: flex;
+	flex-direction: row-reverse;
+}

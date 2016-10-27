@@ -13,9 +13,12 @@ import {fullWhite} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import Checkbox from 'material-ui/Checkbox';
 
 import Dialog from 'material-ui/Dialog';
 
+import {Goals} from '/both/collections/goals.js'
+import {SalesTotal} from '/both/collections/sales.js'
 import {SalesInformation} from '/both/collections/salesInformation.js'
 
 
@@ -29,6 +32,9 @@ class EditSaleSettings extends Component {
 			selectedInfo:'', 
 			currentInfo:undefined, 
 			infoDialogOpen:false, 
+			selectedGoal:'', 
+			currentGoal:undefined, 
+			goalDialogOpen:false, 
 		};
 	}
 
@@ -38,6 +44,14 @@ class EditSaleSettings extends Component {
 		}
 		else{
 			Meteor.call('salesInformation.add');
+		}
+	}
+	handleGoalListSelect = (event, newMenuItem) => {
+		if(newMenuItem!='new'){
+			this.setState({selectedGoal: newMenuItem, currentGoal: this.props.goals.find((goal) => {return goal._id==newMenuItem;})});
+		}
+		else{
+			Meteor.call('goals.add');
 		}
 	}
 	onTabChange = (value) => {
@@ -115,10 +129,12 @@ class EditSaleSettings extends Component {
 	    	    		/>
 				</div>
 			</div>
-			<RaisedButton 
-	    		onTouchTap={this.handleRemoveInfoButton}
-	    		label='Ta bort'
-				/>
+			<div className='flowInverseRow'>
+				<RaisedButton 
+		    		onTouchTap={this.handleRemoveInfoButton}
+		    		label='Ta bort'
+					/>
+			</div>
 			<Dialog
 	    		title={'Ta bort entitet : '+info._id}
 	    		modal={true}
@@ -127,6 +143,117 @@ class EditSaleSettings extends Component {
 	    		actions={actionButtons}
 	    		>
 	    		Är du säker på att du vill ta bort denna nyhet? 
+	    	</Dialog>
+		</div>);
+	}
+
+	onEditGoalName = (event) => {
+		let goal = this.state.currentGoal;
+		goal.name=event.target.value
+		this.setState({currentGoal:goal});
+		Meteor.call('goals.update', goal);
+	}
+	onEditGoalAmount = (event) => {
+		let value = event.target.value.trim();
+		if(isNaN(value)){return;}
+		let goal = this.state.currentGoal;
+		goal.amountOfRasps=value.length>0?parseInt(value):''
+		this.setState({currentGoal:goal});
+		if(!isNaN(goal.amountOfRasps)){
+			Meteor.call('goals.update', goal);
+		}
+	}
+	onEditGoalDescription = (event) => {
+		let goal = this.state.currentGoal;
+		goal.description=event.target.value
+		this.setState({currentGoal:goal});
+		Meteor.call('goals.update', goal);
+	}
+
+	onGoalAchieveCheck = (event, value) => {
+		let goal = this.state.currentGoal;
+		Meteor.call('goals.setAchieved', goal._id, value);		
+		goal.isAchieved = value;
+		goal.dateAchieved = value? new Date(): undefined;
+		this.setState({currentGoal:goal});
+	}
+	
+
+	handleRemoveGoalButton = () => {
+		this.setState({goalDialogOpen:true});
+	}
+	handleRemoveGoalCancel = () => {
+		this.setState({goalDialogOpen:false});
+	}
+	handleRemoveGoalConfirm = () => {
+		Meteor.call('goals.remove', this.state.selectedGoal);
+		this.setState({goalDialogOpen:false, selectedGoal:'', currentGoal: undefined});
+	}
+
+	renderEditGoalCard(goal){
+		const modalStyle =  {
+			width:'100%', 
+			maxWidth:'none',
+		};
+		const actionButtons = [
+			<FlatButton
+				label="Avbryt"
+				onTouchTap={this.handleRemoveGoalCancel}
+				/>,
+			<FlatButton
+				label="Fortsätt"
+				onTouchTap={this.handleRemoveGoalConfirm}
+				/>
+		];
+		return (<div className='paperMargin'>
+			<h4>Försäljningsmål-id: {goal._id}</h4>
+			{goal.isAchieved ?(<h6>{moment(goal.dateAchieved).calendar()}</h6>):''}
+			<div className='flexFlow'>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={goal.name}
+	    	    		onChange={this.onEditGoalName}
+						floatingLabelText='Namn'
+	    	    		/>
+				</div>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={goal.amountOfRasps}
+	    	    		onChange={this.onEditGoalAmount}
+						floatingLabelText='Antal raspar sålda'
+	    	    		/>
+				</div>
+				<div className='flexGrow'>
+					<TextField
+	    	    		value={goal.description}
+	    	    		onChange={this.onEditGoalDescription}
+						floatingLabelText='Beskrivning'
+						multiLine={true}
+	    	    		/>
+				</div>
+			</div>
+			<Checkbox
+				value={goal.isAchieved?goal.isAchieved:false}
+				checked={goal.isAchieved?goal.isAchieved:false}
+				disabled={!(this.props.SalesInfo && this.props.SalesInfo.total >= goal.amountOfRasps) && !goal.isAchieved}
+				onCheck={this.onGoalAchieveCheck}
+				label='Målet uppfyllt och belönat'
+				labelPosition='right'
+				/>
+			<div className='flowInverseRow'>
+				<RaisedButton 
+		    		onTouchTap={this.handleRemoveGoalButton}
+		    		label='Ta bort'
+					/>
+			</div>
+			<Dialog
+	    		title={'Ta bort entitet : '+goal._id}
+	    		modal={true}
+	    		open={this.state.goalDialogOpen}
+	    		contentStyle={modalStyle}
+	    		actions={actionButtons}
+	    		>
+	    		Är du säker på att du vill ta bort detta mål? 
 	    	</Dialog>
 		</div>);
 	}
@@ -173,6 +300,26 @@ class EditSaleSettings extends Component {
 					value='goals'
 					>
 					<div className='flexBox'>
+						<Paper 
+							className='overflowY redaxListContainer'
+							rounded={false}
+						>
+							<SelectableList 
+					                value = {this.state.selectedGoal}
+					                onChange={this.handleGoalListSelect}
+					              	>
+					              	<ListItem 
+					                  primaryText="Lägg till" 
+					                  value={"new"} 
+					                  rightIcon={<AddIcon color={fullWhite}/>}
+					                  />
+		    	    				<Divider/>
+					                {this.props.goals? this.props.goals.map((goal)=>{return this.renderListItem(goal);}):''}
+					            </SelectableList>
+		        			</Paper>
+			            <div className='editImageContainer'>
+			            	{this.state.currentGoal?this.renderEditGoalCard(this.state.currentGoal):''}
+		            	</div>
 	            	</div>
 				</Tab>
 			</Tabs>
@@ -184,7 +331,11 @@ class EditSaleSettings extends Component {
 
 export default createContainer( () => {
 	Meteor.subscribe('salesInformation');
+	Meteor.subscribe('goals');
+	Meteor.subscribe('salesTotal');
 	return {
 		news : SalesInformation.find({},{sort:{createdAt:-1}}).fetch(),
+		goals : Goals.find({},{sort:{amountOfRasps: 1}}).fetch(),
+		SalesInfo : SalesTotal.findOne(), 
 	};
 }, EditSaleSettings);
