@@ -60,6 +60,11 @@ div .paper {
 	margin: 25px;
 }
 
+.fill {
+	width:100%;
+	flex:1;
+}
+
 td {
 	width:auto;
 }
@@ -200,4 +205,11 @@ img {
 div .flowInverseRow {
 	display: flex;
 	flex-direction: row-reverse;
+}
+
+div .salesNewsPost {
+	margin-top: 25px;
+}
+div .salesNewsContent {
+	margin-bottom: 25px;
 }
