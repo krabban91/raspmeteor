@@ -25,6 +25,10 @@ const GoalsSchema = new SimpleSchema({
 		type: Date, 
 		optional:true,
 	},
+	showDescription: {
+		type:Boolean, 
+		optional:false,
+	}
 
 });
 

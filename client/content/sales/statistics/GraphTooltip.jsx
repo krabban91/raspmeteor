@@ -8,10 +8,18 @@ const GraphTooltip = React.createClass({
 		label: PropTypes.string, 
 	}, 
 	render(){
+		const config = {
+		    sameDay: '[Idag]',
+		    nextDay: '[Imorgon]',
+		    nextWeek: 'dddd',
+		    lastDay: '[Igår]',
+		    lastWeek: '[Förra] dddd',
+		    sameElse: 'YYYY-MM-DD'
+		}; 
 		let {active, payload, label} = this.props;
 		if(active){
 			return (<div className='custom-graph-tooltip'>
-				<p className='tooltip-header'> {moment(label, 'YYYY-MM-DD').calendar()}</p>
+				<p className='tooltip-header'> {moment(label, 'YYYY-MM-DD').calendar(null, config)}</p>
 				<p className='tooltip-today'> Dagen: {payload[0].value}</p>
 			</div>);
 		}

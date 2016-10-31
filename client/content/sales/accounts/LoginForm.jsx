@@ -45,7 +45,6 @@ export default class LoginForm extends Component {
 		return (
 			<div className = "login-outer" >
 				<div className ="login-inner">
-					<Paper className='paperPadding'>
 					<h2>Logga in för att fortsätta</h2>
 					<form onSubmit = {this.submit}>
 						<TextField
@@ -72,7 +71,6 @@ export default class LoginForm extends Component {
 							fullWidth={true}
 						/>
 					</form>
-					</Paper>
 				</div>
 			</div>
 		);

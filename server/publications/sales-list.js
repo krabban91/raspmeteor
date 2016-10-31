@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import {Sales, SalesTotal, SaleStats, StrawStats} from '/both/collections/sales.js';
+import {Properties} from '/both/collections/properties.js';
 
 Meteor.publish('sales', function salesPublication(){
 		if(!Roles.userIsInRole(this.userId,['admin'])){
@@ -16,8 +17,22 @@ Meteor.publish('salesTotal', function totalSalesPublication(){
     	this.stop();
     	return;
 	}
+	let settings = Properties.findOne();
+
 	let pipeline = [
-		{$match: {verified : true}},
+		{$match : 
+			{
+				$and:[
+					{verified: true},
+					{sellingDate: {
+						$gte:settings.sellingPeriodStart, 
+						$lte:settings.sellingPeriodStop
+						}
+					}
+				],
+				
+			},
+		},
 		{$project : {sold : "$soldRasps"}},
 		{$group:{_id: 1, total:{$sum:"$sold"}}},
 		{$out:'salesTotal'}
@@ -31,11 +46,20 @@ Meteor.publish('saleStats', function(){
     	this.stop();
     	return;
 	}
+	let settings = Properties.findOne();
 	let pipeline = [
 		{$match : 
 			{
-				verified: true
-			}
+				$and:[
+					{verified: true},
+					{sellingDate: {
+						$gte:settings.sellingPeriodStart, 
+						$lte:settings.sellingPeriodStop
+						}
+					}
+				],
+				
+			},
 		},
 		{$project : 
 			{ 	day : {
@@ -63,11 +87,21 @@ Meteor.publish('strawStats', function(){
     	this.stop();
     	return;
 	}
+	let settings = Properties.findOne();
+	
 	let pipeline = [
 		{$match : 
 			{
-				verified: true
-			}
+				$and:[
+					{verified: true},
+					{sellingDate: {
+						$gte:settings.sellingPeriodStart, 
+						$lte:settings.sellingPeriodStop
+						}
+					}
+				],
+				
+			},
 		},
 		{$unwind: 
 			"$sellers"

@@ -20,7 +20,7 @@ import Dialog from 'material-ui/Dialog';
 import {Goals} from '/both/collections/goals.js'
 import {SalesTotal} from '/both/collections/sales.js'
 import {SalesInformation} from '/both/collections/salesInformation.js'
-
+import {Properties} from '/both/collections/properties.js'
 
 const SelectableList = MakeSelectable(List); 
 
@@ -177,6 +177,12 @@ class EditSaleSettings extends Component {
 		goal.dateAchieved = value? new Date(): undefined;
 		this.setState({currentGoal:goal});
 	}
+	onGoalShowDescCheck = (event, value) => {
+		let goal = this.state.currentGoal;
+		goal.showDescription = value;
+		this.setState({currentGoal:goal});
+		Meteor.call('goals.update', goal);
+	}
 	
 
 	handleRemoveGoalButton = () => {
@@ -208,6 +214,7 @@ class EditSaleSettings extends Component {
 		return (<div className='paperMargin'>
 			<h4>Försäljningsmål-id: {goal._id}</h4>
 			{goal.isAchieved ?(<h6>{moment(goal.dateAchieved).calendar()}</h6>):''}
+			<div>Totalt har {this.props.SalesInfo.total} raspar av {this.props.properties.totalAmountOfRasps} sålts.</div>
 			<div className='flexFlow'>
 				<div className='flexGrow'>
 					<TextField
@@ -232,6 +239,13 @@ class EditSaleSettings extends Component {
 	    	    		/>
 				</div>
 			</div>
+			<Checkbox
+				value={goal.showDescription}
+				checked={goal.showDescription}
+				onCheck={this.onGoalShowDescCheck}
+				label='Visa beskrivning innan målet avklarat'
+				labelPosition='right'
+				/>
 			<Checkbox
 				value={goal.isAchieved?goal.isAchieved:false}
 				checked={goal.isAchieved?goal.isAchieved:false}
@@ -261,6 +275,7 @@ class EditSaleSettings extends Component {
 	render () {
 		return (<div>
 			<Paper className='paperPadding'>
+				<h2>Försäljningsinformation</h2>
 				Välkommen. Här fixas Försäljningsinställningarna. 
 			</Paper>
 			<Paper  style={{marginRight:25, marginBottom:25}}>
@@ -333,9 +348,11 @@ export default createContainer( () => {
 	Meteor.subscribe('salesInformation');
 	Meteor.subscribe('goals');
 	Meteor.subscribe('salesTotal');
+	Meteor.subscribe('properties');
 	return {
 		news : SalesInformation.find({},{sort:{createdAt:-1}}).fetch(),
 		goals : Goals.find({},{sort:{amountOfRasps: 1}}).fetch(),
-		SalesInfo : SalesTotal.findOne(), 
+		SalesInfo : SalesTotal.findOne(),
+		properties : Properties.findOne(), 
 	};
 }, EditSaleSettings);

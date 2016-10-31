@@ -47,7 +47,7 @@ class Partners extends Component {
 	}
 	onSubmitCompany = (event) => {
 		event.preventDefault();
-		Meteor.call('potentialPartner.add', 
+		Meteor.call('potentialPartners.add', 
 			{
 				name:this.state.name,
 				companyName: this.state.companyName, 

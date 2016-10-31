@@ -11,6 +11,7 @@ Meteor.methods({
 			name : 'Första steget',
 			amountOfRasps : 1000,
 			description : 'Redaktörerna kommer att dansa Svansjön i A-Dammen. Lapp kommer att dyka upp om detta. Häng på Scrubben!',
+			showDescription:false,
 		});
 	}
 });
