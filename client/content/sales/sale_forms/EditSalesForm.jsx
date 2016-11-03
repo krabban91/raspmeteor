@@ -16,33 +16,14 @@ import DatePicker from 'material-ui/DatePicker';
 
 import ClearIcon from 'react-material-icons/icons/content/clear';
 
+import Sales from '/both/collections/sales.js';
 
-const initialState = {
-	sellers:[{name:''}], 		//input done	//Validation 
-	sellingDate : new Date(),	//input done	
-	totalSellingTime : '',		//input done	//required
-	sellingLocation : "",		//input done	//required
-	soldRasps : 0,		 		//input done	
-	noOfStraws : 0.5,	 		//input done	
-	swishPayments : 0,	 		//input done	(soldrasps>0 -> swish+izettle >0)
-	iZettlePayments : 0, 		//input done
-	weather : "",				//input done	//required
-	crowdness : "",				//input done	//required
-	tactic : "",				//input done	//required
-	funLevel : "",				//input done	//required
-	comments : "",				//input done
-};
-const initialError = {
-	sellers:'',
-	sales:'', 
-	circumstances:'',
-};
 
 export default class EditSalesForm extends Component {
 	constructor(props){
 		super(props);
-		this.state = initialState;
-		this.error = initialError
+		Meteor.subscribe('singeSale', props.saleId);
+		this.state = Sales.findOne(props.saleId);
 	}
 
 
@@ -76,7 +57,7 @@ export default class EditSalesForm extends Component {
 	validateSellersOnSubmit(sellers){
 		return sellers && 
 			sellers.length>0 && 
-			sellers.every((seller) => {return seller.name && seller.name.trim().length>0});
+			sellers.every((seller) => {return seller.trim().length>0});
 		
 	}
 	validateSalesAndTransactions(soldRasps, swishs, iZettles){
@@ -192,6 +173,7 @@ export default class EditSalesForm extends Component {
 				<h2>Försäljningsformulär</h2>
 				här kommer vi ha ett formulär..<br/>
 				Enkelt att använda osv. 
+				{this.state?
 				<form onSubmit={this.submitForm}>
 					<Paper className='paperPadding' rounded={false}>
 						<h4>Vem?</h4>
@@ -217,7 +199,7 @@ export default class EditSalesForm extends Component {
 					label="Registrera"
 					type='submit'
 					/>
-				</form>
+				</form>:''}
 			</div>
 			);
 	}
@@ -228,10 +210,10 @@ export default class EditSalesForm extends Component {
 			let index = sellers.indexOf(seller);
 			let label = 'Säljare '+(index+1);
 			return (
-				<div key = {index} >
+				<div key = {'seller'+index} >
 					<TextField
 						floatingLabelText={label}
-						value={seller.name}
+						value={seller}
 						onChange={this.onSellerUpdate.bind(this,index)}
 						required={true}
 						/>

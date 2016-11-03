@@ -4,13 +4,21 @@ import {Sales, SalesTotal, SaleStats, StrawStats} from '/both/collections/sales.
 import {Properties} from '/both/collections/properties.js';
 
 Meteor.publish('sales', function salesPublication(){
-		if(!Roles.userIsInRole(this.userId,['admin'])){
+		if(!Roles.userIsInRole(this.userId,['admin','seller'])){
 	    	this.stop();
 	    	return;
 		}
 		let query = Sales.find({});
 		return query;
 	});
+
+Meteor.publish('singleSale', function publishSingleSale(saleId){
+	if(!Roles.userIsInRole(this.userId,['admin','seller'])){
+    	this.stop();
+    	return;
+	}
+	return Sales.find({_id:saleId});
+});
 
 Meteor.publish('salesTotal', function totalSalesPublication(){
 	if(!Roles.userIsInRole(this.userId,['admin', 'seller'])){

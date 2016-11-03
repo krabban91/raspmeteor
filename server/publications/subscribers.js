@@ -6,7 +6,7 @@ import {Subscribers} from '/both/collections/subscribers.js';
 
 
 Meteor.publish('subscribers', function subscribersPublication(){
-	if(!Roles.userIsInRole(this.userId,['admin'])){	
+	if(!Roles.userIsInRole(this.userId,['admin','seller'])){	
     	this.stop();
     	return;
 	}

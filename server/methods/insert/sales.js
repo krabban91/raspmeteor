@@ -26,7 +26,7 @@ Meteor.methods({
 		);
 		//let statsId = sellingDate.yyyymmdd('-');
 
-	    let salesId = Sales.insert(
+	    return Sales.insert(
 	    {
 	    	sellers : saleRecord.sellers.map((a)=> {return a.name;}),
 	    	sellingDate : saleRecord.sellingDate,		

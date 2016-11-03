@@ -45,3 +45,4 @@ chart:chart
 momentjs:moment
 rzymek:moment-locale-sv
 
+utilities:react-list-container

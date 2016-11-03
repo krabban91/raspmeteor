@@ -2,7 +2,9 @@ import React from 'react';
 import {mount} from 'react-mounter';
 import {Session} from 'meteor/session';
 
+import {Sales} from '/both/collections/sales.js';
 
+import Containers, {DocumentContainer} from 'meteor/utilities:react-list-container';
 
 import Home from './content/home/Home.jsx';
 import History from './content/history/History.jsx';
@@ -14,6 +16,8 @@ import Contact from './content/contact/Contact.jsx';
 import SalesHome from './content/sales/SalesHome.jsx';
 import SalesOverview from './content/sales/statistics/SalesOverview.jsx';
 import SalesForm from './content/sales/sale_forms/SalesForm.jsx';
+import EditSalesForm from './content/sales/sale_forms/EditSalesForm.jsx';
+import ViewSale from './content/sales/sale_forms/ViewSale.jsx';
 import LoginForm from './content/sales/accounts/LoginForm.jsx';
 import RegisterUserForm from './content/sales/accounts/RegisterUserForm.jsx';
 import HandleUsers from './content/sales/accounts/HandleUsers.jsx';
@@ -116,6 +120,31 @@ FlowRouter.route('/sales/new', {
 		});
 	}
 });
+
+FlowRouter.route('/sales/view/:saleId', {
+	action(params, queryParams) {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin','seller'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location : 	'/sales/edit/'+params.saleId,
+			content: 	(<DocumentContainer
+							collection={Sales}
+							publication='sales'
+							selector={{_id:params.saleId}}
+							terms={{_id:params.saleId}}
+							>
+							<ViewSale/>
+						</DocumentContainer>),
+		});
+		console.log('view sale with id: '+params.saleId);
+	}
+});
+
 
 FlowRouter.route('/sales/summary', {
 	action() {

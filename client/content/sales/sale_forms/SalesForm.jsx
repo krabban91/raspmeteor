@@ -45,6 +45,15 @@ export default class SalesForm extends Component {
 		this.error = initialError
 	}
 
+	submissionCallback = (err, res) => {
+		if(err) {
+			console.log(err);
+			return;
+		}
+		this.state = initialState;
+		this.error = initialError;
+		FlowRouter.go('/sales/view/'+res);
+	}
 
 	submitForm = (event) => {
 		event.preventDefault();
@@ -67,7 +76,7 @@ export default class SalesForm extends Component {
 		}
 		if(sellersValid && salesValid && circumstancesValid){
 			console.log(this.state);
-			Meteor.call('sales.insert', this.state);
+			Meteor.call('sales.insert', this.state, this.submissionCallback);
 			console.log('form submission. well done!');
 		}
 
@@ -196,7 +205,6 @@ export default class SalesForm extends Component {
 				av Redax så kan man se sin stråstatus under "Överblick".
 				Där är det även möjligt att se hur försäljningen går i stora drag.   
 				</Paper>
-				<form onSubmit={this.submitForm}>
 					<div className='flexFlow'>
 					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Vem?</h4>
@@ -221,10 +229,9 @@ export default class SalesForm extends Component {
 					</div>
 				<RaisedButton
 					label="Registrera"
-					type='submit'
+					onTouchTap={this.submitForm}
 					style={{float:'right', margin:30}}
 					/>
-				</form>
 			</div>
 			);
 	}
