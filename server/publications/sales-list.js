@@ -12,6 +12,7 @@ Meteor.publish('sales', function salesPublication(){
 		return query;
 	});
 
+// does not quite work. 
 Meteor.publish('singleSale', function publishSingleSale(saleId){
 	if(!Roles.userIsInRole(this.userId,['admin','seller'])){
     	this.stop();

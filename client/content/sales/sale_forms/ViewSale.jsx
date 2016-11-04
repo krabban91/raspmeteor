@@ -18,24 +18,28 @@ export default class ViewSale extends Component {
 	
 	constructor(props){
 		super(props);
-		console.log('vafan.?');
+		this.state= {dialogOpen:false}
 	}
 
-	propTypes = {
-		document:PropTypes.object.isRequired,
+	static propTypes = {
+		document:PropTypes.object,
 		currentUser:PropTypes.object,
 	}
 
 	onRemoveClick = () =>
 	{
-		
+		this.setState({dialogOpen:true});
 	}
 	onRemoveCancel = () =>
 	{
+		this.setState({dialogOpen:false});
 		
 	}
 	onRemoveConfirm = () =>
 	{
+		Meteor.call('sales.remove',this.props.document._id);
+		this.setState({dialogOpen:false});
+		FlowRouter.go('/sales');
 
 	}
 
@@ -47,49 +51,80 @@ export default class ViewSale extends Component {
 				<Paper className='paperPadding paperMargin'>
 				<h2>Försäljning registrerad</h2>
 				<Divider/>
+				<div>
 				Tack för att du har registrerat din försäljning. 
+				</div>
+				<div>
+					Det underlättar arbetet otroligt mycket att inte behöva gissa hur det gick för {this.props.document?(this.props.document.sellers.length==1?'dig':'er'):''}   
+				</div>
+				<div>
+					Om någonting ser fel ut så är det lättast att ta bort den här rapporten och skapa en ny. 
+				</div>
 
-				Det underlättar arbetet otroligt mycket att inte behöva gissa hur det gick för {this.props.document?(this.props.document.sellers.length==1?'dig':'er'):''}   
 				</Paper>
 				{this.props.document?<div>
-					<div className='flexFlow'>
+					<div className=''>
 						<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
-							<h4>Vem?</h4>
 							{this.renderSellers()}
 						</Paper>
 						<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
-							<h4>När? Var?</h4>
 							{this.renderDate()}
 						</Paper>
 						<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
-							<h4>Hur mycket?</h4>
 							{this.renderSalesStats()}
 						</Paper>
 						<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
-							<h4>Omständigheter?</h4>
 							{this.renderCircumstances()}
 						</Paper>
 						<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
-							<h4>Övrigt</h4>
 							{this.renderRemainders()}
 						</Paper>
 					</div>
-					xzzs
+					{this.renderRemoveDialog()}
+					
+				</div>:''}
+			</div>);
+	}
+	renderRemoveDialog(){
+		const modalStyle =  {
+			width:'100%', 
+			maxWidth:'none',
+		};
+		const actionButtons = [
+			<FlatButton
+				label="Avbryt"
+				onTouchTap={this.onRemoveCancel}
+				/>,
+			<FlatButton
+				label="Fortsätt"
+				onTouchTap={this.onRemoveConfirm}
+				/>
+		];
+		return <div>
 					<RaisedButton
 						label="Ta bort"
 						style={{float:'right', margin:30}}
+						onTouchTap={this.onRemoveClick}
 						/>
-				</div>:''}
-			</div>);
+					<Dialog
+			    		title={'Ta bort rapporten : '+this.props.document._id}
+			    		modal={true}
+			    		open={this.state.dialogOpen}
+			    		contentStyle={modalStyle}
+			    		actions={actionButtons}
+			    		>
+			    		Är du säker på att du vill ta bort den här rapporten? 
+	    			</Dialog>
+		</div>
 	}
 
 	renderSellers(){
 		let sellers = this.props.document.sellers;
 		return (<div>
-			<h3>De som sålde var</h3>
+			<h3>De som sålde var:</h3>
 			{sellers.map((seller) => {
-				return (<div>
-						{sellers}
+				return (<div key={seller}>
+						{seller}
 					</div>);
 			})}
 		</div>);
@@ -99,18 +134,15 @@ export default class ViewSale extends Component {
 		let sale = this.props.document;
 		return (<div>
 			<h3>Tid och plats</h3>
-			<table><tbody>
-			<tr><td>
+			<table><tbody><tr><td>
 			Datum
-			</td> <td>{moment(sale.sellingDate).calendar()}</td>
-			</tr>
-			<tr><td>
+			</td><td style={{paddingLeft:5}}>{moment(sale.sellingDate).calendar()}</td>
+			</tr><tr><td>
 			Försäljningstid 
-			</td> <td>{sale.totalSellingTime}</td>
-			</tr>
-			<tr><td>
+			</td><td style={{paddingLeft:5}}>{sale.totalSellingTime}</td>
+			</tr><tr><td>
 			Plats 
-			</td> <td>{sale.sellingLocation}</td>
+			</td><td style={{paddingLeft:5}}>{sale.sellingLocation}</td>
 			</tr>
 			</tbody></table>
 
@@ -124,15 +156,15 @@ export default class ViewSale extends Component {
 			<table><tbody>
 			<tr><td>
 			Strån/person 
-			</td> <td>{sale.noOfStraws}</td>
+			</td><td style={{paddingLeft:5}}>{sale.noOfStraws}</td>
 			</tr>
 			<tr><td>
 			Sålda Raspar
-			</td> <td>{sale.soldRasps}</td>
+			</td><td style={{paddingLeft:5}}>{sale.soldRasps}</td>
 			</tr>
 			<tr><td>
 			Betalingar (Swish vs iZettle) 
-			</td> <td>{sale.swishPayments} vs {sale.iZettlePayments}</td>
+			</td><td style={{paddingLeft:5}}>{sale.swishPayments} vs {sale.iZettlePayments}</td>
 			</tr>
 			</tbody></table>
 		</div>);
@@ -144,17 +176,17 @@ export default class ViewSale extends Component {
 		return (<div>
 			<h3>Omständigheter</h3>
 			<table><tbody>
-			<tr><td>
+			<tr ><td>
 			Vädret
-			</td> <td>{sale.weather}</td>
+			</td><td style={{paddingLeft:5}}>{sale.weather}</td>
 			</tr>
 			<tr><td>
 			Antal förbipasserande
-			</td> <td>{sale.crowdness}</td>
+			</td><td style={{paddingLeft:5}}>{sale.crowdness}</td>
 			</tr>
 			<tr><td>
 			Rolighetsnivå
-			</td> <td>{sale.funLevel}</td>
+			</td><td style={{paddingLeft:5}}>{sale.funLevel}</td>
 			</tr>
 			</tbody></table>
 		</div>);

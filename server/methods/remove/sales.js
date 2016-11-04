@@ -3,14 +3,11 @@ import {Sales} from '/both/collections/sales.js';
 
 Meteor.methods({
 	'sales.remove'(salesId) {
-	 	// Make sure the user is logged in before inserting a task
-	    //if (! this.userId) {
-	    //  throw new Meteor.Error('not-authorized');
-	    //}
-	    //Also check if specific rasp-admin. 
+	 	if(!Meteor.user() || !Roles.userIsInRole(Meteor.user(),['admin', 'seller'])){
+	    	throw new Meteor.Error('not-authorized');
+		}
 	    const sale = Sales.findOne(salesId);
-	    if(sale === undefined) //real check later on
-	    {
+	    if(sale === undefined)	    {
 	    	throw new Meteor.Error('bad-argument');
 	    }
 	    Sales.remove(salesId);

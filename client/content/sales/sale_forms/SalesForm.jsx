@@ -47,7 +47,6 @@ export default class SalesForm extends Component {
 
 	submissionCallback = (err, res) => {
 		if(err) {
-			console.log(err);
 			return;
 		}
 		this.state = initialState;
@@ -75,9 +74,7 @@ export default class SalesForm extends Component {
 			this.setState({weather:this.state.weather});
 		}
 		if(sellersValid && salesValid && circumstancesValid){
-			console.log(this.state);
 			Meteor.call('sales.insert', this.state, this.submissionCallback);
-			console.log('form submission. well done!');
 		}
 
 	}
@@ -169,8 +166,6 @@ export default class SalesForm extends Component {
 	// Circumstances
 	onWeatherChange = (event, value) => {
 		this.error.circumstances='';
-		console.log(event);
-		console.log(value);
 		this.setState({weather:value});
 
 	}
