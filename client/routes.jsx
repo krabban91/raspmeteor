@@ -131,7 +131,7 @@ FlowRouter.route('/sales/view/:saleId', {
 			FlowRouter.go('/sales');
 		}
 		mount(SalesLayout, {
-			location : 	'/sales/edit/'+params.saleId,
+			location : 	'/sales/view/'+params.saleId,
 			content: 	(<DocumentContainer
 							collection={Sales}
 							publication='sales'
@@ -139,6 +139,30 @@ FlowRouter.route('/sales/view/:saleId', {
 							terms={{_id:params.saleId}}
 							>
 							<ViewSale/>
+						</DocumentContainer>),
+		});
+		console.log('view sale with id: '+params.saleId);
+	}
+});
+
+FlowRouter.route('/sales/edit/:saleId', {
+	action(params, queryParams) {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location : 	'/sales/edit/'+params.saleId,
+			content: 	(<DocumentContainer
+							collection={Sales}
+							publication='sales'
+							selector={{_id:params.saleId}}
+							terms={{_id:params.saleId}}
+							>
+							<EditSalesForm/>
 						</DocumentContainer>),
 		});
 		console.log('view sale with id: '+params.saleId);

@@ -125,6 +125,9 @@ div .redaxListContainer {
 	max-height:550px;
 	min-width: 200px;
 }
+div .fixedHeight {
+	max-height:550px;
+}
 div .overflowY {
 	overflow-y:auto;
 }

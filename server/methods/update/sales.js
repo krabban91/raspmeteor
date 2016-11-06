@@ -12,5 +12,27 @@ Meteor.methods({
 			verified: Boolean,
 		});
 		Sales.update(params.saleId, { $set : {verified : params.verified}});
-	}
+	},
+	'sales.update'(sale){
+		if(!Meteor.user() || !Roles.userIsInRole(Meteor.user(),['admin'])){
+	    	throw new Meteor.Error('not-authorized');
+		}
+		console.log(sale);
+		check(sale, Object);
+		let saleId = sale._id;
+		delete sale._id;
+		Sales.upsert(saleId, { $set : sale});
+	},
+	'sales.addSeller'(sale){
+		if(!Meteor.user() || !Roles.userIsInRole(Meteor.user(),['admin'])){
+	    	throw new Meteor.Error('not-authorized');
+		}
+		check(sale, Object);
+		let saleId = sale._id;
+		delete sale._id;
+		sale.sellers.push(' ');
+		console.log(sale);
+		Sales.upsert(saleId, { $set : sale});
+	},
+
 });

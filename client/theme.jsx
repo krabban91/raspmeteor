@@ -51,6 +51,11 @@ modifyMuiTheme = function(){
 		radioButton: {
 			checkedColor:palette.accent3Color,
 		},
+		tableRow: {
+			hoverColor:palette.primary3Color,
+			selectedColor:palette.accent3Color,
+			borderColor:palette.primary2Color,
+		},
 	};
 	let theme = getMuiTheme(darkBaseTheme, modifications);
 	return theme;

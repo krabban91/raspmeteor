@@ -27,14 +27,16 @@ import Straw from './Straw.jsx'
 
 class SalesOverview extends Component {
 
-	renderSalesTable(sales, title){
+	renderSalesTable(sales, title, useLink){
 		return (
 			<Paper className='paperPadding'>
 				<h2>{title}</h2>
+					<div className='fixedHeight overflowY'>
 					<Table>
 						<TableHeader
 							displaySelectAll={false}
 							adjustForCheckbox={false}>
+
 							<TableRow>
 								<TableHeaderColumn>Datum</TableHeaderColumn>
 								<TableHeaderColumn>Försäljare</TableHeaderColumn>
@@ -45,17 +47,21 @@ class SalesOverview extends Component {
 								<TableHeaderColumn className='small'>Verifierad</TableHeaderColumn>
 							</TableRow>
 						</TableHeader>
-						<TableBody>
+						<TableBody
+							showRowHover={true}
+						>
 							{sales.map((sale) => {
 								return (
 									<Sale
 									  key={sale._id}
 									  sale={sale}
+									  useLink={useLink}
 									/>
 								);
 							})}
 						</TableBody>
 					</Table>
+					</div>
 			</Paper>);
 	}
 	
@@ -108,26 +114,28 @@ class SalesOverview extends Component {
 		return (
 			<Paper className='paperPadding'>
 				<h2>Strån tagna per person</h2>
-					<Table>
-						<TableHeader
-							displaySelectAll={false}
-							adjustForCheckbox={false}>
-							<TableRow>
-								<TableHeaderColumn>Säljare</TableHeaderColumn>
-								<TableHeaderColumn>Strån tagna</TableHeaderColumn>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{this.props.strawStats.map((e) => {
-								return (
-									<Straw
-									  	key={e._id}
-										straw={e}
-										/>
-								);
-							})}
-						</TableBody>
-					</Table>
+					<div className='fixedHeight overflowY'>
+						<Table>
+							<TableHeader
+								displaySelectAll={false}
+								adjustForCheckbox={false}>
+								<TableRow>
+									<TableHeaderColumn>Säljare</TableHeaderColumn>
+									<TableHeaderColumn>Strån tagna</TableHeaderColumn>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								{this.props.strawStats.map((e) => {
+									return (
+										<Straw
+										  	key={e._id}
+											straw={e}
+											/>
+									);
+								})}
+							</TableBody>
+						</Table>
+					</div>
 			</Paper>
 		);
 	}
@@ -153,7 +161,7 @@ class SalesOverview extends Component {
 				{Roles.userIsInRole(Meteor.userId(), ['admin'])?(
 					<div>
 						{unverified.length>0?
-							this.renderSalesTable(unverified, "Overifierad försäljning"):''}
+							this.renderSalesTable(unverified, "Overifierad försäljning", true):''}
 						{verified.length>0?
 							this.renderSalesTable(verified, "Verifierad försäljning"):''}
 					</div>):''}

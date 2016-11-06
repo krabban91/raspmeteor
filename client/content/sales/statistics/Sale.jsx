@@ -25,10 +25,12 @@ export default class Sale extends Component {
 
 
 	render(){
+		let date =this.props.useLink? <a href={'/sales/edit/'+this.props.sale._id}>{this.props.sale.sellingDate.yyyymmdd('-')}</a>:this.props.sale.sellingDate.yyyymmdd('-');
+					
 		return (
 			<TableRow>
 				<TableRowColumn>
-					{this.props.sale.sellingDate.yyyymmdd('-')}
+					{date}
 				</TableRowColumn>
 				<TableRowColumn>
 					{this.props.sale.sellers.join(',')}	
@@ -62,4 +64,5 @@ export default class Sale extends Component {
 
 Sale.PropTypes = {
 	sale : PropTypes.object.isRequired,
+	useLink: PropTypes.bool.isRequired,
 };

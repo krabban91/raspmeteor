@@ -4,12 +4,17 @@ import classnames from 'classnames';
 import ReactAutoForm from 'meteor-react-autoform';
 
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
+
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Dialog from 'material-ui/Dialog';
+
 
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
@@ -22,82 +27,54 @@ import Sales from '/both/collections/sales.js';
 export default class EditSalesForm extends Component {
 	constructor(props){
 		super(props);
-		Meteor.subscribe('singeSale', props.saleId);
-		this.state = Sales.findOne(props.saleId);
+		this.state= {dialogOpen:false}
 	}
 
+	static propTypes = {
+		document:PropTypes.object,
+		currentUser:PropTypes.object,
+	}
 
-	submitForm = (event) => {
-		event.preventDefault();
-		//check sellers
-		let sellersValid = this.validateSellersOnSubmit(this.state.sellers); 
-		if(!sellersValid){
-			this.error.sellers='Namn saknas eller tomma fält.';
-			this.setState({sellers:this.state.sellers});
-		}
-		let salesValid = this.validateSalesAndTransactions(
-			this.state.soldRasps, this.state.swishPayments,this.state.iZettlePayments);
-		if(!salesValid){
-			this.error.sales = 'Fel mellan transaktioner och antal raspar sålda.'
-			this.setState({soldRasps:this.state.soldRasps});
-		}
-		let circumstancesValid = this.validateCircumstances(this.state.weather, this.state.crowdness, this.state.tactic, this.state.funLevel);
-		if(!circumstancesValid){
-			this.error.circumstances = 'Välj något bara.';
-			this.setState({weather:this.state.weather});
-		}
-		if(sellersValid && salesValid && circumstancesValid){
-			console.log(this.state);
-			Meteor.call('sales.insert', this.state);
-			console.log('form submission. well done!');
-		}
+	onRemoveClick = () =>
+	{
+		this.setState({dialogOpen:true});
+	}
+	onRemoveCancel = () =>
+	{
+		this.setState({dialogOpen:false});
+		
+	}
+	onRemoveConfirm = () =>
+	{
+		Meteor.call('sales.remove',this.props.document._id);
+		this.setState({dialogOpen:false});
+		FlowRouter.go('/sales');
 
 	}
 	
-	validateSellersOnSubmit(sellers){
-		return sellers && 
-			sellers.length>0 && 
-			sellers.every((seller) => {return seller.trim().length>0});
-		
-	}
-	validateSalesAndTransactions(soldRasps, swishs, iZettles){
-		let noTransactions = swishs === 0 && iZettles === 0;
-		let noneSold = soldRasps===0;
-		return noneSold === noTransactions;
-	}
-
-	validateCircumstances(weather, crowdness, tactic, funLevel){
-		return weather !=='' &&
-			crowdness!==''&&
-			tactic!==''&&
-			funLevel!=='';
-	}
 
 	//-----------------------
 	//Sellers
 	onSellerRemove = (key, event) => {
-		let sellers = this.state.sellers;
-		sellers.splice(key,1);
-		this.error.sellers='';
-			
-		this.setState({sellers:sellers});
+		let sale = this.props.document;
+		sale.sellers.splice(key,1);
+		Meteor.call('sales.update',sale);
 	}
 	onSellerUpdate = (key, event) => {
-		let sellers = this.state.sellers;
-		sellers[key].name = event.target.value;
-		this.error.sellers='';
-		this.setState({sellers:sellers});
+		let sale = this.props.document;
+		sale.sellers[key] = event.target.value;
+		Meteor.call('sales.update',sale);
 	}
 	onAddSeller = (event) => {
-		let sellers = this.state.sellers;
-		sellers.push({name:''}); 
-		this.error.sellers='';
-		this.setState({sellers:sellers});
+		let sale = this.props.document;
+		Meteor.call('sales.addSeller',sale);
 	}
 	//-----------------------
 	// Date information
 	onDateChange = (nell, date) => {
-		this.setState({sellingDate:date});	
+		let sale = this.props.document;
+		sale.sellingDate = date;
+		Meteor.call('sales.update',sale);
 	}
 	isDateInvalid = (date) => {
 		let today = new Date();
@@ -105,10 +82,14 @@ export default class EditSalesForm extends Component {
 		return dayDiff > 30 || dayDiff <-1;
 	}
 	onTimeChange = (event) => {
-		this.setState({totalSellingTime:event.target.value});
+		let sale = this.props.document;
+		sale.totalSellingTime = event.target.value;
+		Meteor.call('sales.update',sale);
 	}
 	onPlaceChange = (event) => {
-		this.setState({sellingLocation:event.target.value});
+		let sale = this.props.document.sale;
+		sale.sellingLocation = event.target.value;
+		Meteor.call('sales.update',sale);
 	}
 
 	//-----------------------
@@ -116,52 +97,61 @@ export default class EditSalesForm extends Component {
 	onRaspsSoldChange = (event) => {
 		let value = event.target.value.trim();
 		if(isNaN(value)) {return;}
-		this.error.sales='';
-		this.setState({soldRasps:(value.length>0?parseInt(value):'')});
-		this.setState({swishPayments:Math.min(this.state.swishPayments, Math.floor(value/2))});
-		this.setState({iZettlePayments:Math.min(this.state.iZettlePayments,Math.floor(value/2))});
+		let sale = this.props.document;
+		sale.soldRasps = (value.length>0?parseInt(value):'');
+		sale.swishPayments = Math.min(sale.swishPayments, Math.floor(value/2));
+		sale.iZettlePayments = Math.min(sale.iZettlePayments,Math.floor(value/2));
+		Meteor.call('sales.update',sale);
 	}
 	
 	onStrawsChange = (event, value) => {
-		this.setState({noOfStraws:value});
+		let sale = this.props.document;
+		sale.noOfStraws = value;
+		Meteor.call('sales.update',sale);
 	}
 	onSwishChange = (event, value) => {
-		this.error.sales='';
-		let iZettle = Math.min(this.state.soldRasps-value, this.state.iZettlePayments);
-		this.setState({swishPayments:value});
-		this.setState({iZettlePayments:iZettle});
+		let sale = this.props.document;
+		let iZettle = Math.min(sale.soldRasps-value, sale.iZettlePayments);
+		sale.swishPayments = value;
+		sale.iZettlePayments = iZettle;
+		Meteor.call('sales.update',sale);
 	}
 	onIZettleChange = (event, value) => {
-		this.error.sales='';
-		let swish = Math.min(this.state.soldRasps-value, this.state.swishPayments);
-		this.setState({iZettlePayments:value});
-		this.setState({swishPayments:swish});
+		let sale = this.props.document;
+		let swish = Math.min(sale.soldRasps-value, sale.swishPayments);
+		sale.iZettlePayments = value;
+		sale.swishPayments = swish;
+		Meteor.call('sales.update',sale);
 	}
 	//-----------------------
 	// Circumstances
 	onWeatherChange = (event, value) => {
-		this.error.circumstances='';
-		console.log(event);
-		console.log(value);
-		this.setState({weather:value});
+		let sale = this.props.document;
+		sale.weather = value;
+		Meteor.call('sales.update',sale);
 
 	}
 	onCrowdChange = (event, value) => {
-		this.error.circumstances='';
-		this.setState({crowdness:value});	
+		let sale = this.props.document;
+		sale.crowdness = value;
+		Meteor.call('sales.update',sale);
 	}
 	onTacticChange = (event, value) => {
-		this.error.circumstances='';
-		this.setState({tactic:value});	
+		let sale = this.props.document;
+		sale.tactic = value;
+		Meteor.call('sales.update',sale);
 	}
 	onFunLevelChange = (event, value) => {
-		this.error.circumstances='';
-		this.setState({funLevel:value});	
+		let sale = this.props.document;
+		sale.funLevel = value;
+		Meteor.call('sales.update',sale);
 	}
 	//-----------------------
 	// Other
 	onCommentsChange = (event) => {
-		this.setState({comments:event.target.value});	
+		let sale = this.props.document;
+		sale.comments = event.target.value;
+		Meteor.call('sales.update',sale);
 	}
 
 	//-----------------------
@@ -170,42 +160,72 @@ export default class EditSalesForm extends Component {
 	render(){	
 		return (
 			<div className = "salesForm" >
-				<h2>Försäljningsformulär</h2>
-				här kommer vi ha ett formulär..<br/>
-				Enkelt att använda osv. 
-				{this.state?
-				<form onSubmit={this.submitForm}>
-					<Paper className='paperPadding' rounded={false}>
+				<Paper className='paperPadding paperMargin'>
+					<h2>Ändra försäljning</h2>
+					<Divider/>
+					Försäljningsid : {this.props.document._id} 
+				</Paper>
+				<div className='flexFlow'>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Vem?</h4>
 						{this.renderSellers()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>När? Var?</h4>
 						{this.renderDate()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Hur mycket?</h4>
 						{this.renderSalesStats()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Omständigheter?</h4>
 						{this.renderCircumstances()}
 					</Paper>
-					<Paper className='paperPadding' rounded={false}>
+					<Paper className='paperPadding paperMargin flexGrow' rounded={false}>
 						<h4>Övrigt</h4>
 						{this.renderRemainders()}
 					</Paper>
-				<RaisedButton
-					label="Registrera"
-					type='submit'
-					/>
-				</form>:''}
+				</div>
+				{this.renderRemoveDialog()}
 			</div>
 			);
 	}
+	renderRemoveDialog(){
+		const modalStyle =  {
+			width:'100%', 
+			maxWidth:'none',
+		};
+		const actionButtons = [
+			<FlatButton
+				label="Avbryt"
+				onTouchTap={this.onRemoveCancel}
+				/>,
+			<FlatButton
+				label="Fortsätt"
+				onTouchTap={this.onRemoveConfirm}
+				/>
+		];
+		return <div>
+			<RaisedButton
+				label="Ta bort"
+				style={{float:'right', margin:30}}
+				onTouchTap={this.onRemoveClick}
+				/>
+			<Dialog
+	    		title={'Ta bort rapporten : '+this.props.document._id}
+	    		modal={true}
+	    		open={this.state.dialogOpen}
+	    		contentStyle={modalStyle}
+	    		actions={actionButtons}
+	    		>
+	    		Är du säker på att du vill ta bort den här rapporten? 
+			</Dialog>
+		</div>
+	}
 
 	renderSellers(){
-		let sellers = this.state.sellers;
+		let sellers = this.props.document.sellers;
 		let fields = sellers.map((seller) =>{
 			let index = sellers.indexOf(seller);
 			let label = 'Säljare '+(index+1);
@@ -231,11 +251,11 @@ export default class EditSalesForm extends Component {
 					label="Lägg till säljare"
 					onTouchTap={this.onAddSeller}
 					/>);
-		return (<div>{fields} <div className='error-label'>{this.error.sellers.length==0?'':(<span>{this.error.sellers}</span>)}</div> <br/> {addField} </div>);
+		return (<div>{fields} <br/> {addField} </div>);
 	}
 
 	renderDate() {
-		let sale = this.state;
+		let sale = this.props.document;
 		let datePicker = (
 			<DatePicker
 				id='date_picker'
@@ -267,7 +287,7 @@ export default class EditSalesForm extends Component {
 
 	renderSalesStats(){
 		let possibleSales = _.range(151);
-		let sale = this.state;
+		let sale = this.props.document;
 		let rasps = (<TextField
 						floatingLabelText='Antal raspar sålda'
 						value={sale.soldRasps}
@@ -315,12 +335,12 @@ export default class EditSalesForm extends Component {
 					/>
 			</div>);
 
-		return (<div>{rasps} {straws} {swish} {iZettle}<div className='error-label'>{this.error.sales.length==0?'':(<span>{this.error.sales}</span>)}</div></div>);
+		return (<div>{rasps} {straws} {swish} {iZettle}</div>);
 	}
 
 
 	renderCircumstances(){
-		let sale = this.state;
+		let sale = this.props.document;
 		const styles = {
 			radiobutton: {
 				marginBottom: 8,
@@ -471,7 +491,7 @@ export default class EditSalesForm extends Component {
 				</RadioButtonGroup>
 			</div>			
 		);
-		return (<div>{weather} {crowdness} {tactic} {funLevel}<div className='error-label'>{this.error.circumstances.length==0?'':(<span>{this.error.circumstances}</span>)}</div></div>)
+		return (<div>{weather} {crowdness} {tactic} {funLevel}</div>)
 	}
 
 	renderRemainders(){
@@ -479,7 +499,7 @@ export default class EditSalesForm extends Component {
 			<div>
 				<TextField
 					floatingLabelText='Kommentarer/förbättringsåsikter'
-					value={this.state.comments}
+					value={this.props.document.comments}
 					onChange={this.onCommentsChange}
 					multiLine={true}
 					rows={3}

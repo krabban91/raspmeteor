@@ -20,7 +20,7 @@ const GraphTooltip = React.createClass({
 		if(active){
 			return (<div className='custom-graph-tooltip'>
 				<p className='tooltip-header'> {moment(label, 'YYYY-MM-DD').calendar(null, config)}</p>
-				<p className='tooltip-today'> Dagen: {payload[0].value}</p>
+				<p className='tooltip-today'>{payload[0].value} tidningar</p>
 			</div>);
 		}
 		return null;
