@@ -17,7 +17,6 @@ Meteor.methods({
 		if(!Meteor.user() || !Roles.userIsInRole(Meteor.user(),['admin'])){
 	    	throw new Meteor.Error('not-authorized');
 		}
-		console.log(sale);
 		check(sale, Object);
 		let saleId = sale._id;
 		delete sale._id;
@@ -31,7 +30,6 @@ Meteor.methods({
 		let saleId = sale._id;
 		delete sale._id;
 		sale.sellers.push(' ');
-		console.log(sale);
 		Sales.upsert(saleId, { $set : sale});
 	},
 
