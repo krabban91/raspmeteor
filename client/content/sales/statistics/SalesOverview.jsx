@@ -154,9 +154,9 @@ class SalesOverview extends Component {
 				</Paper>
 				{Roles.userIsInRole(Meteor.userId(),['seller','admin'])?(
 					<div>
-						{this.renderGraph()}
+						{this.props.saleStats.length>0?this.renderGraph():''}
 					 	{this.renderGoals()}
-					 	{this.renderStraws()}
+					 	{this.props.strawStats.length>0?this.renderStraws():''}
 					</div>):''}
 				{Roles.userIsInRole(Meteor.userId(), ['admin'])?(
 					<div>

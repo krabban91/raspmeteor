@@ -98,7 +98,7 @@ export default class SalesTopBar extends Component {
                       href={"/sales/settings/information"}
                     />, 
                     <ListItem
-                      primaryText="Redax medlemmar"
+                      primaryText="Redax"
                       value={"/sales/settings/redax"} 
                       href={"/sales/settings/redax"}  
                     />, 
@@ -108,7 +108,7 @@ export default class SalesTopBar extends Component {
                       href={"/sales/settings/images"}
                     />, 
                     <ListItem
-                      primaryText="Priser för partners"
+                      primaryText="Partners"
                       value={"/sales/settings/partners"} 
                       href={"/sales/settings/partners"}
                     />, 

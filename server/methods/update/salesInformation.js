@@ -10,6 +10,6 @@ Meteor.methods({
 		check(info, Object);
 		let infoId = info._id;
 		delete info._id;
-		PreviousPartners.upsert(infoId, { $set : info});
+		SalesInformation.upsert(infoId, { $set : info});
 	}
 });

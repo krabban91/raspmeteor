@@ -8,7 +8,14 @@ Meteor.publish('sales', function salesPublication(){
 	    	this.stop();
 	    	return;
 		}
-		let query = Sales.find({});
+		let settings = Properties.findOne();
+
+		let query = Sales.find({
+			sellingDate: {
+				$gte:settings.sellingPeriodStart, 
+				$lte:settings.sellingPeriodStop
+				}
+			});
 		return query;
 	});
 
