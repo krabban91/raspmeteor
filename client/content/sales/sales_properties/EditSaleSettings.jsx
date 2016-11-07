@@ -214,7 +214,7 @@ class EditSaleSettings extends Component {
 		return (<div className='paperMargin'>
 			<h4>Försäljningsmål-id: {goal._id}</h4>
 			{goal.isAchieved ?(<h6>{moment(goal.dateAchieved).calendar()}</h6>):''}
-			<div>Totalt har {this.props.SalesInfo.total} raspar av {this.props.properties.totalAmountOfRasps} sålts.</div>
+			{this.props.SalesInfo && this.props.properties?<div>Totalt har {this.props.SalesInfo.total} raspar av {this.props.properties.totalAmountOfRasps} sålts.</div>:''}
 			<div className='flexFlow'>
 				<div className='flexGrow'>
 					<TextField
