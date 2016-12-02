@@ -5,7 +5,7 @@ med tillhörande försäljningsrapportering
 ## För att deploya som node projekt
 Först i '/' av projektet för att skapa en *.tar.gz-fil
 * $ npm install --production
-* $ meteor build .. --architecture os.linux.x86_64
+* $ meteor build . --architecture os.linux.x86_64
 
 Skicka över filen till servern och ssh:a in (lösenordet finns i kontinuiteten)
 * $ scp -r rasp.tar.gz  rasp@felicia.tfcs.chalmers.se:
@@ -13,6 +13,7 @@ Skicka över filen till servern och ssh:a in (lösenordet finns i kontinuiteten)
 
 
 Gör diverse installationer och uppdateringar
+* $ tar -xzvf rasp.tar.gz
 * $ mv bundle node
 * $ cd node
 * $ (cd programs/server && npm install && cd ../..)
