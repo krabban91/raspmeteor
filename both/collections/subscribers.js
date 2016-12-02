@@ -12,10 +12,14 @@ const SubscribersSchema = new SimpleSchema({
 		optional : false,
 		trim : false,
 	},
+	createdAt : {
+		type : Date, 
+		optional : false,
+	},
 	isContacted : {
 		type : Boolean, 
 		optional : true,
-	}
+	},
 });
 
 Subscribers.attachSchema(SubscribersSchema);

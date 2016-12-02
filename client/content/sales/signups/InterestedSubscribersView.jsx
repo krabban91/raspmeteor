@@ -1,4 +1,3 @@
-
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -9,12 +8,12 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Table, TableHeader, TableBody, TableRow, TableRowColumn, TableHeaderColumn} from 'material-ui/Table';
 
-import PotentialPartnersRow from './PotentialPartnersRow.jsx'
-import {PotentialPartners} from '/both/collections/potentialPartners.js';
+import PotentialClientRow from './PotentialClientRow.jsx'
+import {Subscribers} from '/both/collections/subscribers.js';
 
 class InterestedSubscribersView extends Component {
 
-	renderClientsTable(partners, title){
+	renderClientsTable(clients, title){
 		return (
 			<Paper className='paperPadding'>
 				<h3>{title}</h3>
@@ -26,22 +25,19 @@ class InterestedSubscribersView extends Component {
 
 							<TableRow>
 								<TableHeaderColumn>Datum</TableHeaderColumn>
-								<TableHeaderColumn>Företag</TableHeaderColumn>
 								<TableHeaderColumn>Kontaktperson</TableHeaderColumn>
 								<TableHeaderColumn>Epost</TableHeaderColumn>
-								<TableHeaderColumn>Telefon</TableHeaderColumn>
-								<TableHeaderColumn>Meddelande</TableHeaderColumn>
 								<TableHeaderColumn className='small'>Kontaktad</TableHeaderColumn>
 							</TableRow>
 						</TableHeader>
 						<TableBody
 							showRowHover={true}
 						>
-							{partners.map((partner) => {
+							{clients.map((client) => {
 								return (
-									<PotentialPartnersRow
-									  key={partner._id}
-									  partner={partner}
+									<PotentialClientRow
+									  key={client._id}
+									  client={client}
 									/>
 								);
 							})}
@@ -55,13 +51,13 @@ class InterestedSubscribersView extends Component {
 	    return (
 			<div className="container">
 				<Paper className='paperPadding' rounded={false}>
-					<h2>Intresserade annonsörer</h2>
+					<h2>Intresserade tidningsköpare</h2>
 	        	    <Divider/>
-					Här finner du de företag som kontaktat Raspredax för att få delta i partnerskap.
+					Här finner du de privatpersoner som kontaktat Raspredax för att få tag i en tidning.
 	        	</Paper>
 	        	<div className='flexFlow vertical'>
-				{this.props.potentialPartners && this.props.potentialPartners.length>0?
-					this.renderClientsTable(this.props.potentialPartners, "Intressenter ("+this.props.potentialPartners.length + "st)"):''}
+				{this.props.potentialClients && this.props.potentialClients.length>0?
+					this.renderClientsTable(this.props.potentialClients, "Intressenter ("+this.props.potentialClients.length + "st)"):''}
 		        </div>
 			</div>
 		);
@@ -69,8 +65,8 @@ class InterestedSubscribersView extends Component {
 }
 
 export default createContainer(()=> {
-	//Meteor.subscribe('potentialPartners');
+	Meteor.subscribe('subscribers');
 	return {
-		potentialPartners : PotentialPartners.find({},{sort:{createdAt:-1}}).fetch(),
+		potentialClients : Subscribers.find({},{sort:{createdAt:-1}}).fetch(),
 	};
 }, InterestedSubscribersView);

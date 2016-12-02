@@ -4,6 +4,7 @@ import {Session} from 'meteor/session';
 
 import {Sales} from '/both/collections/sales.js';
 import {PotentialPartners} from '/both/collections/potentialPartners.js';
+import {Subscribers} from '/both/collections/subscribers.js';
 
 import Containers, {DocumentContainer} from 'meteor/utilities:react-list-container';
 
@@ -26,6 +27,7 @@ import HandleUsers from './content/sales/accounts/HandleUsers.jsx';
 import InterestedPartnersView from './content/sales/signups/InterestedPartnersView.jsx';
 import InterestedSubscribersView from './content/sales/signups/InterestedSubscribersView.jsx';
 import InterestedPartnerSingle from './content/sales/signups/InterestedPartnerSingle.jsx';
+import InterestedClientSingle from './content/sales/signups/InterestedClientSingle.jsx';
 
 
 import ContactSettings from './content/sales/main_page_properties/ContactSettings.jsx';
@@ -171,7 +173,7 @@ FlowRouter.route('/sales/edit/:saleId', {
 							<EditSalesForm/>
 						</DocumentContainer>),
 		});
-		console.log('view sale with id: '+params.saleId);
+		console.log('edit sale with id: '+params.saleId);
 	}
 });
 
@@ -283,6 +285,32 @@ FlowRouter.route('/sales/signups/clients', {
 			location: "/sales/signups/clients",
 			content : (<InterestedSubscribersView />),
 		});
+
+	}
+});
+
+
+FlowRouter.route('/sales/signups/clients/view/:clientId', {
+	action(params, queryParams) {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin','seller'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location: "/sales/signups/clients/view/"+params.clientId,
+			content: (<DocumentContainer
+						collection={Subscribers}
+						publication='subscribers'
+						selector={{_id:params.clientId}}
+						terms={{_id:params.clientId}}
+						>
+						<InterestedClientSingle/>
+					</DocumentContainer>)
+		});
+		console.log('view client with id: '+params.clientId);
 
 	}
 });

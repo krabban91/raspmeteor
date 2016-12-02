@@ -4,7 +4,6 @@ import { check } from 'meteor/check';
 import {Subscribers, SubscribersSchema} from '/both/collections/subscribers.js';
 
 Meteor.methods({
-	
 	'subscribers.insert'(subscriber) {
 		check(subscriber, Object);
 		check(subscriber, 
@@ -12,6 +11,10 @@ Meteor.methods({
 				email : String, 
 				name : String,
 			})
-		return Subscribers.insert({email : subscriber.email, name: subscriber.name });
+		return Subscribers.insert({
+			email : subscriber.email, 
+			name: subscriber.name,
+			createdAt : new Date(),
+		});
 	}
 });

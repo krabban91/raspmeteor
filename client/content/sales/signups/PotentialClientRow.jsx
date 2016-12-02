@@ -14,18 +14,18 @@ Date.prototype.yyyymmdd = function(char){
 }
 
 
-export default class PotentialPartnersRow extends Component {
+export default class PotentialClientRow extends Component {
 
 	onIsContactedChanged = (event, isInputChecked) => {
 		if(Roles.userIsInRole(Meteor.userId(), ['admin'])){
-			Meteor.call('potentialPartners.changeContactedStatus', {partnerId:this.props.partner._id, isContacted:isInputChecked});
+			Meteor.call('subscribers.changeContactedStatus', {clientId:this.props.client._id, isContacted:isInputChecked});
 		}
 	}
 
 
 	render(){
-		let date = <a href={'/sales/signups/partners/view/'+
-			this.props.partner._id}>{this.props.partner.createdAt.yyyymmdd('-')}</a>;
+		let date = <a href={'/sales/signups/clients/view/'+
+			this.props.client._id}>{this.props.client.createdAt.yyyymmdd('-')}</a>;
 
 		return (
 			<TableRow>
@@ -33,27 +33,18 @@ export default class PotentialPartnersRow extends Component {
 					{date}
 				</TableRowColumn>
 				<TableRowColumn>
-					{this.props.partner.companyName}	
+					{this.props.client.name}	
 				</TableRowColumn>
 				<TableRowColumn>
-					{this.props.partner.name}	
-				</TableRowColumn>
-				<TableRowColumn>
-					{this.props.partner.email}	
-				</TableRowColumn>
-				<TableRowColumn>
-					{this.props.partner.phone}
-				</TableRowColumn>
-				<TableRowColumn>
-					{this.props.partner.message}	
+					{this.props.client.email}	
 				</TableRowColumn>
 				<TableRowColumn>
 					{Roles.userIsInRole(Meteor.userId(), ['admin'])?
 						(<Checkbox
-							checked={this.props.partner.isContacted?this.props.partner.isContacted:false}
+							checked={this.props.client.isContacted?this.props.client.isContacted:false}
 							onCheck={this.onIsContactedChanged}
 						/>):
-						this.props.partner.isContacted?'Ja':'Nej'
+						this.props.client.isContacted?'Ja':'Nej'
 					}
 				</TableRowColumn>				
 			</TableRow>
@@ -62,6 +53,6 @@ export default class PotentialPartnersRow extends Component {
 }
 
 
-PotentialPartnersRow.PropTypes = {
-	partner : PropTypes.object.isRequired,
+PotentialClientRow.PropTypes = {
+	client : PropTypes.object.isRequired,
 };
