@@ -3,6 +3,7 @@ import {mount} from 'react-mounter';
 import {Session} from 'meteor/session';
 
 import {Sales} from '/both/collections/sales.js';
+import {PotentialPartners} from '/both/collections/potentialPartners.js';
 
 import Containers, {DocumentContainer} from 'meteor/utilities:react-list-container';
 
@@ -21,6 +22,11 @@ import ViewSale from './content/sales/sale_forms/ViewSale.jsx';
 import LoginForm from './content/sales/accounts/LoginForm.jsx';
 import RegisterUserForm from './content/sales/accounts/RegisterUserForm.jsx';
 import HandleUsers from './content/sales/accounts/HandleUsers.jsx';
+
+import InterestedPartnersView from './content/sales/signups/InterestedPartnersView.jsx';
+import InterestedSubscribersView from './content/sales/signups/InterestedSubscribersView.jsx';
+import InterestedPartnerSingle from './content/sales/signups/InterestedPartnerSingle.jsx';
+
 
 import ContactSettings from './content/sales/main_page_properties/ContactSettings.jsx';
 import EditPartnerDeals from './content/sales/main_page_properties/EditPartnerDeals.jsx';
@@ -223,6 +229,61 @@ FlowRouter.route('/sales/handleusers', {
 			content : (<HandleUsers 
 						/>),
 		});
+	}
+});
+
+//Signups
+
+FlowRouter.route('/sales/signups/partners', {
+	action() {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		} 
+		mount(SalesLayout, {
+			location: "/sales/signups/partners",
+			content : (<InterestedPartnersView />),
+		});
+	}
+});
+
+FlowRouter.route('/sales/signups/partners/view/:partnerId', {
+	action(params, queryParams) {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		}
+		if(!Roles.userIsInRole(user, ['admin','seller'])){
+			FlowRouter.go('/sales');
+		}
+		mount(SalesLayout, {
+			location: "/sales/signups/partners/view/"+params.partnerId,
+			content: (<DocumentContainer
+						collection={PotentialPartners}
+						publication='potentials'
+						selector={{_id:params.partnerId}}
+						terms={{_id:params.partnerId}}
+						>
+						<InterestedPartnerSingle/>
+					</DocumentContainer>)
+		});
+		console.log('view partner with id: '+params.partnerId);
+
+	}
+});
+
+
+FlowRouter.route('/sales/signups/clients', {
+	action() {
+		let user = Meteor.user();
+		if (!user){
+			FlowRouter.go('/sales/login');
+		} 
+		mount(SalesLayout, {
+			location: "/sales/signups/clients",
+			content : (<InterestedSubscribersView />),
+		});
+
 	}
 });
 

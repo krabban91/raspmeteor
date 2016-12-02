@@ -69,7 +69,14 @@ div .pad1 {
 }
 
 td {
+	vertical-align: top;
 	width:auto;
+	padding-right: 5px;
+
+}
+td .longtext{
+	white-space: pre;
+	word-wrap: break-word;
 }
 th {
 	width:auto;

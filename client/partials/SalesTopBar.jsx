@@ -87,6 +87,18 @@ export default class SalesTopBar extends Component {
                   value={"/sales/handleusers"} 
                   href={"/sales/handleusers"} 
                   />):''}
+                {Meteor.user() && Roles.userIsInRole(Meteor.user(), ['admin']) ? (
+                  <ListItem
+                      primaryText="Intresserade företag"
+                      value={"/sales/signups/partners"} 
+                      href={"/sales/signups/partners"}  
+                    />):''}
+                {Meteor.user() && Roles.userIsInRole(Meteor.user(), ['admin']) ? (
+                  <ListItem
+                      primaryText="Intresserade kunder"
+                      value={"/sales/signups/clients"} 
+                      href={"/sales/signups/clients"}  
+                    />):''}
                 {Meteor.user() && Roles.userIsInRole(Meteor.user(), ['admin']) ? (<ListItem
                   primaryText="Inställningar hemsidan"
                   initiallyOpen={false}

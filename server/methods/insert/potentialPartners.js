@@ -19,7 +19,8 @@ Meteor.methods({
 			companyName: partner.companyName,
 			email : partner.email, 
 			phone : partner.phone, 
-			message : partner.message, 
+			message : partner.message,
+			createdAt : new Date(),
 		});
 	}
 });

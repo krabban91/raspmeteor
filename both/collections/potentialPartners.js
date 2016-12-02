@@ -27,6 +27,10 @@ const PotentialPartnersSchema = new SimpleSchema({
 	isContacted : {
 		type : Boolean, 
 		optional : true,
+	},
+	createdAt : {
+		type : Date,
+		optional : false
 	}
 });
 
